@@ -24,7 +24,7 @@ view model =
 
     {-- Header --}
         , header [ class "display-container content wide", id "home", style [ ("max-width", "1500px") ] ] 
-                 [ img [ class "image", src "/Users/aebbert/Eagle Project/images/Salt_Lake_City_Temple.jpg", alt "Salt Lake City Temple", style [ ("width", "100%"), ("height", "800") ] ] []
+                 [ img [ class "image", src "https://orig00.deviantart.net/2a24/f/2015/091/7/6/no_more_art___salt_lake_city__utah_temple_by_0nuku-d8nxvhr.jpg", alt "Salt Lake City Temple", style [ ("width", "100%"), ("height", "800") ] ] []
                  , div [ class "display-middle margin-top center" ] 
                        [ h1 [ class "xxlarge text-white" ] 
                             [ span [ class "padding black opacity-min" ] [ b [] [ text "Talk" ] ]      
