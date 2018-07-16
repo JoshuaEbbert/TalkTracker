@@ -1,62 +1,4 @@
-var _user$project$TalkTracker$initialModel = {
-	inputFields: {
-		ctor: '::',
-		_0: 'Ward',
-		_1: {
-			ctor: '::',
-			_0: 'Date',
-			_1: {
-				ctor: '::',
-				_0: 'Time',
-				_1: {
-					ctor: '::',
-					_0: 'Conducting',
-					_1: {
-						ctor: '::',
-						_0: 'Organist',
-						_1: {
-							ctor: '::',
-							_0: 'Chorister',
-							_1: {
-								ctor: '::',
-								_0: 'Opening Hymn',
-								_1: {
-									ctor: '::',
-									_0: 'Invocation',
-									_1: {
-										ctor: '::',
-										_0: 'Sacrament Hymn',
-										_1: {
-											ctor: '::',
-											_0: 'First Speaker',
-											_1: {
-												ctor: '::',
-												_0: 'Second Speaker',
-												_1: {
-													ctor: '::',
-													_0: 'Third Speaker',
-													_1: {
-														ctor: '::',
-														_0: 'Closing Hymn',
-														_1: {
-															ctor: '::',
-															_0: 'Benediction',
-															_1: {ctor: '[]'}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-};
+var _user$project$TalkTracker$initialModel = {numSpeakers: 3};
 var _user$project$TalkTracker$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
@@ -99,6 +41,52 @@ var _user$project$TalkTracker$viewInputField = function (name) {
 				{ctor: '[]'}),
 			_1: {ctor: '[]'}
 		});
+};
+var _user$project$TalkTracker$postSpeakers = {
+	ctor: '::',
+	_0: 'Closing Hymn',
+	_1: {
+		ctor: '::',
+		_0: 'Benediction',
+		_1: {ctor: '[]'}
+	}
+};
+var _user$project$TalkTracker$preSpeakers = {
+	ctor: '::',
+	_0: 'Ward',
+	_1: {
+		ctor: '::',
+		_0: 'Date',
+		_1: {
+			ctor: '::',
+			_0: 'Time',
+			_1: {
+				ctor: '::',
+				_0: 'Conducting',
+				_1: {
+					ctor: '::',
+					_0: 'Organist',
+					_1: {
+						ctor: '::',
+						_0: 'Chorister',
+						_1: {
+							ctor: '::',
+							_0: 'Opening Hymn',
+							_1: {
+								ctor: '::',
+								_0: 'Invocation',
+								_1: {
+									ctor: '::',
+									_0: 'Sacrament Hymn',
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 };
 var _user$project$TalkTracker$view = function (model) {
 	return A2(
@@ -399,7 +387,28 @@ var _user$project$TalkTracker$view = function (model) {
 									_0: A2(
 										_elm_lang$html$Html$form,
 										{ctor: '[]'},
-										A2(_elm_lang$core$List$map, _user$project$TalkTracker$viewInputField, model.inputFields)),
+										A2(
+											_elm_lang$core$List$map,
+											_user$project$TalkTracker$viewInputField,
+											function (list) {
+												return _elm_lang$core$List$concat(
+													{
+														ctor: '::',
+														_0: _user$project$TalkTracker$preSpeakers,
+														_1: {
+															ctor: '::',
+															_0: list,
+															_1: {
+																ctor: '::',
+																_0: _user$project$TalkTracker$postSpeakers,
+																_1: {ctor: '[]'}
+															}
+														}
+													});
+											}(
+												function (num) {
+													return A2(_elm_lang$core$List$repeat, num, 'Speaker');
+												}(model.numSpeakers)))),
 									_1: {
 										ctor: '::',
 										_0: A2(
@@ -666,8 +675,8 @@ var _user$project$TalkTracker$main = _elm_lang$html$Html$program(
 		}
 	})();
 var _user$project$TalkTracker$Model = function (a) {
-	return {inputFields: a};
+	return {numSpeakers: a};
 };
-var _user$project$TalkTracker$NumSpeakers = function (a) {
-	return {ctor: 'NumSpeakers', _0: a};
+var _user$project$TalkTracker$SetNumSpeakers = function (a) {
+	return {ctor: 'SetNumSpeakers', _0: a};
 };

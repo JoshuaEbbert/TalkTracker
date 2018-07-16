@@ -3,6 +3,17 @@ module TalkTracker exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (id, class, classList, src, name, type_, title, href, style, alt, width, height, action, target, placeholder, required)
 
+
+{-- preSpeakers is a list containing the input fields that will be rendered before the speaker fields. --}
+preSpeakers : List String
+preSpeakers =  [ "Ward", "Date", "Time", "Conducting", "Organist", "Chorister", "Opening Hymn", "Invocation", "Sacrament Hymn" ]
+
+
+{-- postSpeakers is a list containing the input fields that will follow the speaker fields --}
+postSpeakers : List String
+postSpeakers = [ "Closing Hymn", "Benediction" ]
+
+
 view : Model -> Html Msg
 view model =
     div [] 
@@ -39,7 +50,11 @@ view model =
         {-- Sacrament Meeting Program Section --}
               [ div [ class "container padding-32", id "sacrament-meeting-program" ] [ h3 [ class "border-bottom border-light-grey padding-16" ] [ text "Sacrament Meeting Program" ] ]
               , div [ class "row-padding" ] []
-              , form [] ( List.map viewInputField model.inputFields )
+              , form [] ( model.numSpeakers
+                            |> (\num -> List.repeat num "Speaker")
+                            |> (\list -> List.concat [ preSpeakers, list, postSpeakers ] )
+                            |> List.map viewInputField
+                        )
               , button [ class "button black section" ] [ i [ class "fa fa-paper-plane" ] [ text "SUBMIT" ] ]
 
         {-- About Section --}
@@ -93,14 +108,14 @@ update msg model =
 
 
 type Msg
-    = NumSpeakers Int
+    = SetNumSpeakers Int
 
 
 initialModel : Model
-initialModel = { inputFields = [ "Ward", "Date", "Time", "Conducting", "Organist", "Chorister", "Opening Hymn", "Invocation", "Sacrament Hymn", "First Speaker", "Second Speaker", "Third Speaker", "Closing Hymn", "Benediction" ] }
+initialModel = { numSpeakers = 3 }
 
 
-type alias Model = { inputFields : List String }
+type alias Model = { numSpeakers : Int}
 
 
 main : Program Never Model Msg
