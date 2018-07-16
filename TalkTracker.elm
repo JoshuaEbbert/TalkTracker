@@ -52,7 +52,7 @@ view model =
               , div [ class "row-padding" ] []
               , form [] ( model.numSpeakers
                             |> (\num -> List.repeat num "Speaker")
-                            |> (\list -> List.concat [ preSpeakers, list, postSpeakers ] )
+                            |> (\list -> List.concat [ preSpeakers, list, ( List.repeat model.numSpcMusic "Special Music Number" ), postSpeakers ] )
                             |> List.map viewInputField
                         )
               , button [ class "button black section" ] [ i [ class "fa fa-paper-plane" ] [ text "SUBMIT" ] ]
@@ -60,7 +60,7 @@ view model =
         {-- About Section --}
               , div [ class "container padding-32", id "about" ]
                     [ h3 [ class "border-bottom border-light-grey padding-16" ] [ text "About" ] 
-                    , p [] [ text "I'm a paragraph! Fill me with information about you and why you made this website!" ]
+                    , p [] [ text "I'm a paragraph! Fill me with information about TalkTracker!" ]
                     ]
 
         {-- Contact Section --}        
@@ -82,9 +82,10 @@ view model =
     {-- Footer --}
         , footer [ class "center black padding-16" ] [ p [] [ text "Created by Joshua Ebbert" ] ]
         ]
-
-
-
+{--
+renameDuplicates : List String -> List String
+renameDuplicates = 
+--}
 
 viewInputField : String -> Html Msg
 viewInputField name =
@@ -109,13 +110,16 @@ update msg model =
 
 type Msg
     = SetNumSpeakers Int
+    | NumSpcMusic Int
 
 
 initialModel : Model
-initialModel = { numSpeakers = 3 }
+initialModel = { numSpeakers = 3 
+               , numSpcMusic = 1 }
 
 
-type alias Model = { numSpeakers : Int}
+type alias Model = { numSpeakers : Int
+                   , numSpcMusic : Int }
 
 
 main : Program Never Model Msg

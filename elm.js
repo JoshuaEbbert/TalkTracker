@@ -8145,7 +8145,7 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
-var _user$project$TalkTracker$initialModel = {numSpeakers: 3};
+var _user$project$TalkTracker$initialModel = {numSpeakers: 3, numSpcMusic: 1};
 var _user$project$TalkTracker$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
@@ -8547,8 +8547,12 @@ var _user$project$TalkTracker$view = function (model) {
 															_0: list,
 															_1: {
 																ctor: '::',
-																_0: _user$project$TalkTracker$postSpeakers,
-																_1: {ctor: '[]'}
+																_0: A2(_elm_lang$core$List$repeat, model.numSpcMusic, 'Special Music Number'),
+																_1: {
+																	ctor: '::',
+																	_0: _user$project$TalkTracker$postSpeakers,
+																	_1: {ctor: '[]'}
+																}
 															}
 														}
 													});
@@ -8615,7 +8619,7 @@ var _user$project$TalkTracker$view = function (model) {
 															{ctor: '[]'},
 															{
 																ctor: '::',
-																_0: _elm_lang$html$Html$text('I\'m a paragraph! Fill me with information about you and why you made this website!'),
+																_0: _elm_lang$html$Html$text('I\'m a paragraph! Fill me with information about TalkTracker!'),
 																_1: {ctor: '[]'}
 															}),
 														_1: {ctor: '[]'}
@@ -8821,8 +8825,12 @@ var _user$project$TalkTracker$main = _elm_lang$html$Html$program(
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
-var _user$project$TalkTracker$Model = function (a) {
-	return {numSpeakers: a};
+var _user$project$TalkTracker$Model = F2(
+	function (a, b) {
+		return {numSpeakers: a, numSpcMusic: b};
+	});
+var _user$project$TalkTracker$NumSpcMusic = function (a) {
+	return {ctor: 'NumSpcMusic', _0: a};
 };
 var _user$project$TalkTracker$SetNumSpeakers = function (a) {
 	return {ctor: 'SetNumSpeakers', _0: a};
