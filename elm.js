@@ -8145,7 +8145,7 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
-var _user$project$TalkTracker$initialModel = {numSpeakers: 3, numSpcMusic: 1};
+var _user$project$TalkTracker$initialModel = {numSpeakers: 3, numSpcMusic: 0};
 var _user$project$TalkTracker$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
@@ -8163,6 +8163,22 @@ var _user$project$TalkTracker$nameToId = function (name) {
 				' ',
 				_elm_lang$core$String$toLower(name))));
 };
+var _user$project$TalkTracker$optionBuilder = function (optionValue) {
+	return A2(
+		_elm_lang$html$Html$option,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$value(
+				_elm_lang$core$Basics$toString(optionValue)),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				_elm_lang$core$Basics$toString(optionValue)),
+			_1: {ctor: '[]'}
+		});
+};
 var _user$project$TalkTracker$viewInputField = function (name) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -8179,9 +8195,13 @@ var _user$project$TalkTracker$viewInputField = function (name) {
 						_0: _elm_lang$html$Html_Attributes$placeholder(name),
 						_1: {
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$id(
-								_user$project$TalkTracker$nameToId(name)),
-							_1: {ctor: '[]'}
+							_0: _elm_lang$html$Html_Attributes$required(true),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$id(
+									_user$project$TalkTracker$nameToId(name)),
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				},
@@ -8389,7 +8409,7 @@ var _user$project$TalkTracker$view = function (model) {
 								_0: _elm_lang$html$Html_Attributes$class('image'),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$src('https://orig00.deviantart.net/2a24/f/2015/091/7/6/no_more_art___salt_lake_city__utah_temple_by_0nuku-d8nxvhr.jpg'),
+									_0: _elm_lang$html$Html_Attributes$src('http://travelhdwallpapers.com/wp-content/uploads/2014/02/SaltLake-Temple-8.jpg'),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$html$Html_Attributes$alt('Salt Lake City Temple'),
@@ -8532,198 +8552,240 @@ var _user$project$TalkTracker$view = function (model) {
 								_1: {
 									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$form,
+										_elm_lang$html$Html$div,
 										{ctor: '[]'},
-										A2(
-											_elm_lang$core$List$map,
-											_user$project$TalkTracker$viewInputField,
-											function (list) {
-												return _elm_lang$core$List$concat(
-													{
-														ctor: '::',
-														_0: _user$project$TalkTracker$preSpeakers,
-														_1: {
-															ctor: '::',
-															_0: list,
-															_1: {
-																ctor: '::',
-																_0: A2(_elm_lang$core$List$repeat, model.numSpcMusic, 'Special Music Number'),
-																_1: {
-																	ctor: '::',
-																	_0: _user$project$TalkTracker$postSpeakers,
-																	_1: {ctor: '[]'}
-																}
-															}
-														}
-													});
-											}(
-												function (num) {
-													return A2(_elm_lang$core$List$repeat, num, 'Speaker');
-												}(model.numSpeakers)))),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$button,
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('button black section'),
-												_1: {ctor: '[]'}
-											},
-											{
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$i,
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('fa fa-paper-plane'),
-														_1: {ctor: '[]'}
-													},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('SUBMIT'),
-														_1: {ctor: '[]'}
-													}),
-												_1: {ctor: '[]'}
-											}),
-										_1: {
+										{
 											ctor: '::',
 											_0: A2(
-												_elm_lang$html$Html$div,
+												_elm_lang$html$Html$label,
+												{ctor: '[]'},
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$class('container padding-32'),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$id('about'),
-														_1: {ctor: '[]'}
-													}
-												},
-												{
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$h3,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('border-bottom border-light-grey padding-16'),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('About'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$p,
-															{ctor: '[]'},
-															{
-																ctor: '::',
-																_0: _elm_lang$html$Html$text('I\'m a paragraph! Fill me with information about TalkTracker!'),
-																_1: {ctor: '[]'}
-															}),
-														_1: {ctor: '[]'}
-													}
+													_0: _elm_lang$html$Html$text('Speakers'),
+													_1: {ctor: '[]'}
 												}),
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_elm_lang$html$Html$div,
+													_elm_lang$html$Html$select,
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('container padding-32'),
+														_0: _elm_lang$html$Html_Attributes$class('input section border'),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$id('contact'),
-															_1: {ctor: '[]'}
+															_0: _elm_lang$html$Html_Attributes$id('numSpeakerSelect'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$defaultValue('3'),
+																_1: {ctor: '[]'}
+															}
 														}
+													},
+													A2(
+														_elm_lang$core$List$map,
+														_user$project$TalkTracker$optionBuilder,
+														A2(_elm_lang$core$List$range, 1, 5))),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$div,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$label,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Special Music Numbers'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$select,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$class('input section border'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$id('numSpcMusicSelect'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$defaultValue('0'),
+																	_1: {ctor: '[]'}
+																}
+															}
+														},
+														A2(
+															_elm_lang$core$List$map,
+															_user$project$TalkTracker$optionBuilder,
+															A2(_elm_lang$core$List$range, 0, 3))),
+													_1: {ctor: '[]'}
+												}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$form,
+												{ctor: '[]'},
+												A2(
+													_elm_lang$core$List$map,
+													_user$project$TalkTracker$viewInputField,
+													function (list) {
+														return _elm_lang$core$List$concat(
+															{
+																ctor: '::',
+																_0: _user$project$TalkTracker$preSpeakers,
+																_1: {
+																	ctor: '::',
+																	_0: list,
+																	_1: {
+																		ctor: '::',
+																		_0: A2(_elm_lang$core$List$repeat, model.numSpcMusic, 'Special Music Number'),
+																		_1: {
+																			ctor: '::',
+																			_0: _user$project$TalkTracker$postSpeakers,
+																			_1: {ctor: '[]'}
+																		}
+																	}
+																}
+															});
+													}(
+														function (num) {
+															return A2(_elm_lang$core$List$repeat, num, 'Speaker');
+														}(model.numSpeakers)))),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$button,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('button black section'),
+														_1: {ctor: '[]'}
 													},
 													{
 														ctor: '::',
 														_0: A2(
-															_elm_lang$html$Html$h3,
+															_elm_lang$html$Html$i,
 															{
 																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$class('border-bottom border-light-grey padding-16'),
+																_0: _elm_lang$html$Html_Attributes$class('fa fa-paper-plane'),
 																_1: {ctor: '[]'}
 															},
 															{
 																ctor: '::',
-																_0: _elm_lang$html$Html$text('Contact'),
+																_0: _elm_lang$html$Html$text('SUBMIT'),
 																_1: {ctor: '[]'}
 															}),
-														_1: {
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$div,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$class('container padding-32'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$id('about'),
+																_1: {ctor: '[]'}
+															}
+														},
+														{
 															ctor: '::',
 															_0: A2(
-																_elm_lang$html$Html$p,
-																{ctor: '[]'},
+																_elm_lang$html$Html$h3,
 																{
 																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('For help fill out the form below.'),
+																	_0: _elm_lang$html$Html_Attributes$class('border-bottom border-light-grey padding-16'),
+																	_1: {ctor: '[]'}
+																},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('About'),
 																	_1: {ctor: '[]'}
 																}),
 															_1: {
 																ctor: '::',
 																_0: A2(
-																	_elm_lang$html$Html$form,
+																	_elm_lang$html$Html$p,
+																	{ctor: '[]'},
 																	{
 																		ctor: '::',
-																		_0: _elm_lang$html$Html_Attributes$action('/action_page.php'),
-																		_1: {
-																			ctor: '::',
-																			_0: _elm_lang$html$Html_Attributes$target('_blank'),
-																			_1: {ctor: '[]'}
-																		}
+																		_0: _elm_lang$html$Html$text('Fill me with information about TalkTracker!'),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$div,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$class('container padding-32'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$id('contact'),
+																	_1: {ctor: '[]'}
+																}
+															},
+															{
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$h3,
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Attributes$class('border-bottom border-light-grey padding-16'),
+																		_1: {ctor: '[]'}
 																	},
 																	{
 																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('Contact'),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$p,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text('For help fill out the form below.'),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {
+																		ctor: '::',
 																		_0: A2(
-																			_elm_lang$html$Html$input,
+																			_elm_lang$html$Html$form,
 																			{
 																				ctor: '::',
-																				_0: _elm_lang$html$Html_Attributes$class('input border'),
+																				_0: _elm_lang$html$Html_Attributes$action('/action_page.php'),
 																				_1: {
 																					ctor: '::',
-																					_0: _elm_lang$html$Html_Attributes$placeholder('Name'),
-																					_1: {
-																						ctor: '::',
-																						_0: _elm_lang$html$Html_Attributes$name('Name'),
-																						_1: {ctor: '[]'}
-																					}
+																					_0: _elm_lang$html$Html_Attributes$target('_blank'),
+																					_1: {ctor: '[]'}
 																				}
 																			},
-																			{ctor: '[]'}),
-																		_1: {
-																			ctor: '::',
-																			_0: A2(
-																				_elm_lang$html$Html$input,
-																				{
-																					ctor: '::',
-																					_0: _elm_lang$html$Html_Attributes$class('input section border'),
-																					_1: {
-																						ctor: '::',
-																						_0: _elm_lang$html$Html_Attributes$placeholder('Email'),
-																						_1: {
-																							ctor: '::',
-																							_0: _elm_lang$html$Html_Attributes$name('Email'),
-																							_1: {ctor: '[]'}
-																						}
-																					}
-																				},
-																				{ctor: '[]'}),
-																			_1: {
+																			{
 																				ctor: '::',
 																				_0: A2(
 																					_elm_lang$html$Html$input,
 																					{
 																						ctor: '::',
-																						_0: _elm_lang$html$Html_Attributes$class('input section border'),
+																						_0: _elm_lang$html$Html_Attributes$class('input border'),
 																						_1: {
 																							ctor: '::',
-																							_0: _elm_lang$html$Html_Attributes$placeholder('Subject'),
+																							_0: _elm_lang$html$Html_Attributes$placeholder('Name'),
 																							_1: {
 																								ctor: '::',
-																								_0: _elm_lang$html$Html_Attributes$name('Subject'),
+																								_0: _elm_lang$html$Html_Attributes$name('Name'),
 																								_1: {ctor: '[]'}
 																							}
 																						}
@@ -8738,10 +8800,10 @@ var _user$project$TalkTracker$view = function (model) {
 																							_0: _elm_lang$html$Html_Attributes$class('input section border'),
 																							_1: {
 																								ctor: '::',
-																								_0: _elm_lang$html$Html_Attributes$placeholder('Comment'),
+																								_0: _elm_lang$html$Html_Attributes$placeholder('Email'),
 																								_1: {
 																									ctor: '::',
-																									_0: _elm_lang$html$Html_Attributes$name('Comment'),
+																									_0: _elm_lang$html$Html_Attributes$name('Email'),
 																									_1: {ctor: '[]'}
 																								}
 																							}
@@ -8750,39 +8812,77 @@ var _user$project$TalkTracker$view = function (model) {
 																					_1: {
 																						ctor: '::',
 																						_0: A2(
-																							_elm_lang$html$Html$button,
+																							_elm_lang$html$Html$input,
 																							{
 																								ctor: '::',
-																								_0: _elm_lang$html$Html_Attributes$class('button black section'),
-																								_1: {ctor: '[]'}
+																								_0: _elm_lang$html$Html_Attributes$class('input section border'),
+																								_1: {
+																									ctor: '::',
+																									_0: _elm_lang$html$Html_Attributes$placeholder('Subject'),
+																									_1: {
+																										ctor: '::',
+																										_0: _elm_lang$html$Html_Attributes$name('Subject'),
+																										_1: {ctor: '[]'}
+																									}
+																								}
 																							},
-																							{
+																							{ctor: '[]'}),
+																						_1: {
+																							ctor: '::',
+																							_0: A2(
+																								_elm_lang$html$Html$input,
+																								{
+																									ctor: '::',
+																									_0: _elm_lang$html$Html_Attributes$class('input section border'),
+																									_1: {
+																										ctor: '::',
+																										_0: _elm_lang$html$Html_Attributes$placeholder('Comment'),
+																										_1: {
+																											ctor: '::',
+																											_0: _elm_lang$html$Html_Attributes$name('Comment'),
+																											_1: {ctor: '[]'}
+																										}
+																									}
+																								},
+																								{ctor: '[]'}),
+																							_1: {
 																								ctor: '::',
 																								_0: A2(
-																									_elm_lang$html$Html$i,
+																									_elm_lang$html$Html$button,
 																									{
 																										ctor: '::',
-																										_0: _elm_lang$html$Html_Attributes$class('fa fa-paper-plane'),
+																										_0: _elm_lang$html$Html_Attributes$class('button black section'),
 																										_1: {ctor: '[]'}
 																									},
 																									{
 																										ctor: '::',
-																										_0: _elm_lang$html$Html$text('SEND MESSAGE'),
+																										_0: A2(
+																											_elm_lang$html$Html$i,
+																											{
+																												ctor: '::',
+																												_0: _elm_lang$html$Html_Attributes$class('fa fa-paper-plane'),
+																												_1: {ctor: '[]'}
+																											},
+																											{
+																												ctor: '::',
+																												_0: _elm_lang$html$Html$text('SEND MESSAGE'),
+																												_1: {ctor: '[]'}
+																											}),
 																										_1: {ctor: '[]'}
 																									}),
 																								_1: {ctor: '[]'}
-																							}),
-																						_1: {ctor: '[]'}
+																							}
+																						}
 																					}
 																				}
-																			}
-																		}
-																	}),
-																_1: {ctor: '[]'}
-															}
-														}
-													}),
-												_1: {ctor: '[]'}
+																			}),
+																		_1: {ctor: '[]'}
+																	}
+																}
+															}),
+														_1: {ctor: '[]'}
+													}
+												}
 											}
 										}
 									}

@@ -1,7 +1,7 @@
 module TalkTracker exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (id, class, classList, src, name, type_, title, href, style, alt, width, height, action, target, placeholder, required)
+import Html.Attributes exposing (id, class, classList, src, name, type_, title, href, style, required, value, defaultValue, alt, width, height, action, target, placeholder, required)
 
 
 {-- preSpeakers is a list containing the input fields that will be rendered before the speaker fields. --}
@@ -35,7 +35,7 @@ view model =
 
     {-- Header --}
         , header [ class "display-container content wide", id "home", style [ ("max-width", "1500px") ] ] 
-                 [ img [ class "image", src "https://orig00.deviantart.net/2a24/f/2015/091/7/6/no_more_art___salt_lake_city__utah_temple_by_0nuku-d8nxvhr.jpg", alt "Salt Lake City Temple", style [ ("width", "100%"), ("height", "800") ] ] []
+                 [ img [ class "image", src "http://travelhdwallpapers.com/wp-content/uploads/2014/02/SaltLake-Temple-8.jpg", alt "Salt Lake City Temple", style [ ("width", "100%"), ("height", "800") ] ] []
                  , div [ class "display-middle margin-top center" ] 
                        [ h1 [ class "xxlarge text-white" ] 
                             [ span [ class "padding black opacity-min" ] [ b [] [ text "Talk" ] ]      
@@ -50,17 +50,24 @@ view model =
         {-- Sacrament Meeting Program Section --}
               [ div [ class "container padding-32", id "sacrament-meeting-program" ] [ h3 [ class "border-bottom border-light-grey padding-16" ] [ text "Sacrament Meeting Program" ] ]
               , div [ class "row-padding" ] []
+              , div [] [ label [] [ text "Speakers" ] 
+                       , select [ class "input section border", id "numSpeakerSelect", defaultValue "3"] ( List.map optionBuilder ( List.range 1 5 ) )
+                       ]
+              , div [] [ label [] [ text "Special Music Numbers" ] 
+                       , select [ class "input section border", id "numSpcMusicSelect", defaultValue "0" ] ( List.map optionBuilder ( List.range 0 3 ) )
+                       ]
               , form [] ( model.numSpeakers
                             |> (\num -> List.repeat num "Speaker")
                             |> (\list -> List.concat [ preSpeakers, list, ( List.repeat model.numSpcMusic "Special Music Number" ), postSpeakers ] )
-                            |> List.map viewInputField
-                        )
+                            |> List.map viewInputField )
+
+                        
               , button [ class "button black section" ] [ i [ class "fa fa-paper-plane" ] [ text "SUBMIT" ] ]
 
         {-- About Section --}
               , div [ class "container padding-32", id "about" ]
                     [ h3 [ class "border-bottom border-light-grey padding-16" ] [ text "About" ] 
-                    , p [] [ text "I'm a paragraph! Fill me with information about TalkTracker!" ]
+                    , p [] [ text "Fill me with information about TalkTracker!" ]
                     ]
 
         {-- Contact Section --}        
@@ -82,14 +89,16 @@ view model =
     {-- Footer --}
         , footer [ class "center black padding-16" ] [ p [] [ text "Created by Joshua Ebbert" ] ]
         ]
-{--
-renameDuplicates : List String -> List String
-renameDuplicates = 
---}
+
 
 viewInputField : String -> Html Msg
 viewInputField name =
-    div [] [ input [ class "input section border", placeholder name, id (nameToId name) ] [] ]
+    div [] [ input [ class "input section border", placeholder name, required True, id (nameToId name) ] [] ]
+
+
+optionBuilder : a -> Html msg 
+optionBuilder optionValue =
+    option [value (toString optionValue) ] [ text ( toString optionValue) ]
 
 
 nameToId : String -> String
@@ -115,7 +124,7 @@ type Msg
 
 initialModel : Model
 initialModel = { numSpeakers = 3 
-               , numSpcMusic = 1 }
+               , numSpcMusic = 0 }
 
 
 type alias Model = { numSpeakers : Int
