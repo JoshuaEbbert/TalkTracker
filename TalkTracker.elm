@@ -2,7 +2,7 @@ module TalkTracker exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (id, class, classList, src, name, type_, title, href, style, required, value, defaultValue, alt, width, height, action, target, placeholder, required)
-
+import Html.Events exposing (onInput)
 
 {-- preSpeakers is a list containing the input fields that will be rendered before the speaker fields. --}
 preSpeakers : List String
@@ -50,15 +50,11 @@ view model =
         {-- Sacrament Meeting Program Section --}
               [ div [ class "container padding-32", id "sacrament-meeting-program" ] [ h3 [ class "border-bottom border-light-grey padding-16" ] [ text "Sacrament Meeting Program" ] ]
               , div [ class "row-padding" ] []
-              , div [] [ label [] [ text "Speakers" ] 
-                       , select [ class "input section border", id "numSpeakerSelect", defaultValue "3"] ( List.map optionBuilder ( List.range 1 5 ) )
-                       ]
-              , div [] [ label [] [ text "Special Music Numbers" ] 
-                       , select [ class "input section border", id "numSpcMusicSelect", defaultValue "0" ] ( List.map optionBuilder ( List.range 0 3 ) )
-                       ]
+              , input [ class "input section border", id "numSpeakerInput", placeholder "Number of Speakers", onInput SetNumSpeakers ] []
+              , input [ class "input section border", id "numSpcMusicInput", placeholder "Total Special Musical Numbers", onInput SetNumMusic ] []
               , form [] ( model.numSpeakers
                             |> (\num -> List.repeat num "Speaker")
-                            |> (\list -> List.concat [ preSpeakers, list, ( List.repeat model.numSpcMusic "Special Music Number" ), postSpeakers ] )
+                            |> (\list -> List.concat [ preSpeakers, list, ( List.repeat model.numSpcMusic "Special Musical Number" ), postSpeakers ] )
                             |> List.map viewInputField )
 
                         
@@ -96,11 +92,6 @@ viewInputField name =
     div [] [ input [ class "input section border", placeholder name, required True, id (nameToId name) ] [] ]
 
 
-optionBuilder : a -> Html msg 
-optionBuilder optionValue =
-    option [value (toString optionValue) ] [ text ( toString optionValue) ]
-
-
 nameToId : String -> String
 nameToId name = 
     name
@@ -118,8 +109,8 @@ update msg model =
 
 
 type Msg
-    = SetNumSpeakers Int
-    | NumSpcMusic Int
+    = SetNumSpeakers String
+    | SetNumMusic String
 
 
 initialModel : Model
@@ -139,4 +130,3 @@ main =
         , update = update
         , subscriptions = (\_ -> Sub.none)
         }
-
