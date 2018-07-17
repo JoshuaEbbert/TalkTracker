@@ -113,7 +113,12 @@ parseInt msg string =
     let 
         parseResult = run int string
     in
-        msg parseResult
+        case parseResult of
+            Ok int ->
+                if (int < 0) then msg (Ok 0) else msg (Ok int)
+
+            _ ->
+                msg parseResult
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
