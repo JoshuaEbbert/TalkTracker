@@ -2,7 +2,8 @@ module TalkTracker exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (id, class, classList, src, name, type_, title, href, style, required, value, defaultValue, alt, width, height, action, target, placeholder, required)
-import Html.Events exposing (onInput)
+import Html.Events exposing (onBlur)
+import Parser exposing (run, int)
 
 {-- preSpeakers is a list containing the input fields that will be rendered before the speaker fields. --}
 preSpeakers : List String
@@ -50,8 +51,8 @@ view model =
         {-- Sacrament Meeting Program Section --}
               [ div [ class "container padding-32", id "sacrament-meeting-program" ] [ h3 [ class "border-bottom border-light-grey padding-16" ] [ text "Sacrament Meeting Program" ] ]
               , div [ class "row-padding" ] []
-              , input [ class "input section border", id "numSpeakerInput", placeholder "Number of Speakers", onInput SetNumSpeakers ] []
-              , input [ class "input section border", id "numSpcMusicInput", placeholder "Total Special Musical Numbers", onInput SetNumMusic ] []
+              , input [ class "input section border", id "numSpeakerInput", placeholder "Number of Speakers", onBlur ( SetNumSpeakers (run int) ) ] []
+              , input [ class "input section border", id "numSpcMusicInput", placeholder "Total Special Musical Numbers", onBlur ( SetNumMusic (run int) ) ] []
               , form [] ( model.numSpeakers
                             |> (\num -> List.repeat num "Speaker")
                             |> (\list -> List.concat [ preSpeakers, list, ( List.repeat model.numSpcMusic "Special Musical Number" ), postSpeakers ] )
@@ -104,13 +105,22 @@ nameToId name =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = 
     case msg of
-        _ -> 
-            ( model, Cmd.none )
+        SetNumSpeakers (Ok numSpeakers) ->
+            ( { model | numSpeakers = numSpeakers }, Cmd.none )
+        
+        SetNumSpeakers (Err _) ->
+            (model, Cmd.none)
+
+        SetNumMusic (Ok numSpcMusic) ->
+            ( { model | numSpcMusic = numSpcMusic }, Cmd.none )
+        
+        SetNumMusic (Err _) ->
+            (model, Cmd.none)
 
 
 type Msg
-    = SetNumSpeakers String
-    | SetNumMusic String
+    = SetNumSpeakers (Result Parser.Error Int)
+    | SetNumMusic (Result Parser.Error Int)
 
 
 initialModel : Model
