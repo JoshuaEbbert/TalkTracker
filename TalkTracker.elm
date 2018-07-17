@@ -57,8 +57,8 @@ view model =
         {-- Sacrament Meeting Program Section --}
               [ div [ class "container padding-32", id "sacrament-meeting-program" ] [ h3 [ class "border-bottom border-light-grey padding-16" ] [ text "Sacrament Meeting Program" ] ]
               , div [ class "row-padding" ] []
-              , input [ class "input section border", id "numSpeakerInput", placeholder "Number of Speakers (e.g 4)", onBlurWithTargetValue (parseInt SetNumSpeakers) ] []
-              , input [ class "input section border", id "numSpcMusicInput", placeholder "Total Special Musical Numbers (e.g 1)", onBlurWithTargetValue (parseInt SetNumMusic) ] []
+              , input [ class "input section border", id "numSpeakerInput", placeholder "Number of Speakers (e.g. 4)", onBlurWithTargetValue (parseInt SetNumSpeakers) ] []
+              , input [ class "input section border", id "numSpcMusicInput", placeholder "Total Special Musical Numbers (e.g. 1)", onBlurWithTargetValue (parseInt SetNumMusic) ] []
               , form [] ( model.numSpeakers
                             |> (\num -> List.repeat num "Speaker")
                             |> (\list -> List.concat [ preSpeakers, list, ( List.repeat model.numSpcMusic "Special Musical Number" ), postSpeakers ] )
@@ -113,12 +113,7 @@ parseInt msg string =
     let 
         parseResult = run int string
     in
-        case parseResult of
-            Ok int ->
-                if (int < 0) then msg (Ok 0) else msg (Ok int)
-
-            _ ->
-                msg parseResult
+        msg parseResult
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

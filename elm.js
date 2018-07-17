@@ -9191,7 +9191,15 @@ var _user$project$TalkTracker$update = F2(
 var _user$project$TalkTracker$parseInt = F2(
 	function (msg, string) {
 		var parseResult = A2(_elm_tools$parser$Parser$run, _elm_tools$parser$Parser$int, string);
-		return msg(parseResult);
+		var _p1 = parseResult;
+		if (_p1.ctor === 'Ok') {
+			var _p2 = _p1._0;
+			return (_elm_lang$core$Native_Utils.cmp(_p2, 0) < 0) ? msg(
+				_elm_lang$core$Result$Ok(0)) : msg(
+				_elm_lang$core$Result$Ok(_p2));
+		} else {
+			return msg(parseResult);
+		}
 	});
 var _user$project$TalkTracker$nameToId = function (name) {
 	return function (string) {
@@ -9603,7 +9611,7 @@ var _user$project$TalkTracker$view = function (model) {
 												_0: _elm_lang$html$Html_Attributes$id('numSpeakerInput'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$placeholder('Number of Speakers (e.g 4)'),
+													_0: _elm_lang$html$Html_Attributes$placeholder('Number of Speakers (e.g. 4)'),
 													_1: {
 														ctor: '::',
 														_0: _user$project$TalkTracker$onBlurWithTargetValue(
@@ -9626,7 +9634,7 @@ var _user$project$TalkTracker$view = function (model) {
 													_0: _elm_lang$html$Html_Attributes$id('numSpcMusicInput'),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$placeholder('Total Special Musical Numbers (e.g 1)'),
+														_0: _elm_lang$html$Html_Attributes$placeholder('Total Special Musical Numbers (e.g. 1)'),
 														_1: {
 															ctor: '::',
 															_0: _user$project$TalkTracker$onBlurWithTargetValue(
@@ -9931,7 +9939,7 @@ var _user$project$TalkTracker$main = _elm_lang$html$Html$program(
 		init: {ctor: '_Tuple2', _0: _user$project$TalkTracker$initialModel, _1: _elm_lang$core$Platform_Cmd$none},
 		view: _user$project$TalkTracker$view,
 		update: _user$project$TalkTracker$update,
-		subscriptions: function (_p1) {
+		subscriptions: function (_p3) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
