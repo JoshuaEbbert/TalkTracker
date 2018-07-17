@@ -2,8 +2,9 @@ module TalkTracker exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (id, class, classList, src, name, type_, title, href, style, required, value, defaultValue, alt, width, height, action, target, placeholder, required)
-import Html.Events exposing (onBlur)
+import Html.Events exposing (on, targetValue)
 import Parser exposing (run, int)
+import Json.Decode as Json
 
 {-- preSpeakers is a list containing the input fields that will be rendered before the speaker fields. --}
 preSpeakers : List String
@@ -13,6 +14,11 @@ preSpeakers =  [ "Ward", "Date", "Time", "Conducting", "Organist", "Chorister", 
 {-- postSpeakers is a list containing the input fields that will follow the speaker fields --}
 postSpeakers : List String
 postSpeakers = [ "Closing Hymn", "Benediction" ]
+
+
+onBlurWithTargetValue : (String -> msg) -> Attribute msg 
+onBlurWithTargetValue tagger = 
+    on "blur" (Json.map tagger targetValue)
 
 
 view : Model -> Html Msg
@@ -51,8 +57,8 @@ view model =
         {-- Sacrament Meeting Program Section --}
               [ div [ class "container padding-32", id "sacrament-meeting-program" ] [ h3 [ class "border-bottom border-light-grey padding-16" ] [ text "Sacrament Meeting Program" ] ]
               , div [ class "row-padding" ] []
-              , input [ class "input section border", id "numSpeakerInput", placeholder "Number of Speakers", onBlur ( SetNumSpeakers (run int) ) ] []
-              , input [ class "input section border", id "numSpcMusicInput", placeholder "Total Special Musical Numbers", onBlur ( SetNumMusic (run int) ) ] []
+              , input [ class "input section border", id "numSpeakerInput", placeholder "Number of Speakers (e.g 4)", onBlurWithTargetValue (parseInt SetNumSpeakers) ] []
+              , input [ class "input section border", id "numSpcMusicInput", placeholder "Total Special Musical Numbers (e.g 1)", onBlurWithTargetValue (parseInt SetNumMusic) ] []
               , form [] ( model.numSpeakers
                             |> (\num -> List.repeat num "Speaker")
                             |> (\list -> List.concat [ preSpeakers, list, ( List.repeat model.numSpcMusic "Special Musical Number" ), postSpeakers ] )
@@ -100,6 +106,14 @@ nameToId name =
         |> String.split " " 
         |> String.join "-"
         |> (\string -> string ++ "-input")
+
+
+parseInt : ( (Result Parser.Error Int) -> Msg ) -> String -> Msg
+parseInt msg string = 
+    let 
+        parseResult = run int string
+    in
+        msg parseResult
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
