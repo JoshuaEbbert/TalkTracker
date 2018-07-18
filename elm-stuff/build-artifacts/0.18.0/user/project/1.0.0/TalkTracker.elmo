@@ -2,7 +2,36 @@ var _user$project$TalkTracker$initialModel = {numSpeakers: 3, numSpcMusic: 0};
 var _user$project$TalkTracker$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
-		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		if (_p0.ctor === 'SetNumSpeakers') {
+			if (_p0._0.ctor === 'Ok') {
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{numSpeakers: _p0._0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			} else {
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			}
+		} else {
+			if (_p0._0.ctor === 'Ok') {
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{numSpcMusic: _p0._0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			} else {
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			}
+		}
+	});
+var _user$project$TalkTracker$parseInt = F2(
+	function (msg, string) {
+		var parseResult = A2(_elm_tools$parser$Parser$run, _elm_tools$parser$Parser$int, string);
+		return msg(parseResult);
 	});
 var _user$project$TalkTracker$nameToId = function (name) {
 	return function (string) {
@@ -15,22 +44,6 @@ var _user$project$TalkTracker$nameToId = function (name) {
 				_elm_lang$core$String$split,
 				' ',
 				_elm_lang$core$String$toLower(name))));
-};
-var _user$project$TalkTracker$optionBuilder = function (optionValue) {
-	return A2(
-		_elm_lang$html$Html$option,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$value(
-				_elm_lang$core$Basics$toString(optionValue)),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(
-				_elm_lang$core$Basics$toString(optionValue)),
-			_1: {ctor: '[]'}
-		});
 };
 var _user$project$TalkTracker$viewInputField = function (name) {
 	return A2(
@@ -61,6 +74,12 @@ var _user$project$TalkTracker$viewInputField = function (name) {
 				{ctor: '[]'}),
 			_1: {ctor: '[]'}
 		});
+};
+var _user$project$TalkTracker$onBlurWithTargetValue = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'blur',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue));
 };
 var _user$project$TalkTracker$postSpeakers = {
 	ctor: '::',
@@ -107,6 +126,16 @@ var _user$project$TalkTracker$preSpeakers = {
 			}
 		}
 	}
+};
+var _user$project$TalkTracker$Model = F2(
+	function (a, b) {
+		return {numSpeakers: a, numSpcMusic: b};
+	});
+var _user$project$TalkTracker$SetNumMusic = function (a) {
+	return {ctor: 'SetNumMusic', _0: a};
+};
+var _user$project$TalkTracker$SetNumSpeakers = function (a) {
+	return {ctor: 'SetNumSpeakers', _0: a};
 };
 var _user$project$TalkTracker$view = function (model) {
 	return A2(
@@ -405,81 +434,49 @@ var _user$project$TalkTracker$view = function (model) {
 								_1: {
 									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$div,
-										{ctor: '[]'},
+										_elm_lang$html$Html$input,
 										{
 											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$label,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('Speakers'),
-													_1: {ctor: '[]'}
-												}),
+											_0: _elm_lang$html$Html_Attributes$class('input section border'),
 											_1: {
 												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$select,
-													{
+												_0: _elm_lang$html$Html_Attributes$id('numSpeakerInput'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$placeholder('Number of Speakers (e.g. 4)'),
+													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('input section border'),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$id('numSpeakerSelect'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$defaultValue('3'),
-																_1: {ctor: '[]'}
-															}
-														}
-													},
-													A2(
-														_elm_lang$core$List$map,
-														_user$project$TalkTracker$optionBuilder,
-														A2(_elm_lang$core$List$range, 1, 5))),
-												_1: {ctor: '[]'}
+														_0: _user$project$TalkTracker$onBlurWithTargetValue(
+															_user$project$TalkTracker$parseInt(_user$project$TalkTracker$SetNumSpeakers)),
+														_1: {ctor: '[]'}
+													}
+												}
 											}
-										}),
+										},
+										{ctor: '[]'}),
 									_1: {
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$div,
-											{ctor: '[]'},
+											_elm_lang$html$Html$input,
 											{
 												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$label,
-													{ctor: '[]'},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('Special Music Numbers'),
-														_1: {ctor: '[]'}
-													}),
+												_0: _elm_lang$html$Html_Attributes$class('input section border'),
 												_1: {
 													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$select,
-														{
+													_0: _elm_lang$html$Html_Attributes$id('numSpcMusicInput'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$placeholder('Total Special Musical Numbers (e.g. 1)'),
+														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('input section border'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$id('numSpcMusicSelect'),
-																_1: {
-																	ctor: '::',
-																	_0: _elm_lang$html$Html_Attributes$defaultValue('0'),
-																	_1: {ctor: '[]'}
-																}
-															}
-														},
-														A2(
-															_elm_lang$core$List$map,
-															_user$project$TalkTracker$optionBuilder,
-															A2(_elm_lang$core$List$range, 0, 3))),
-													_1: {ctor: '[]'}
+															_0: _user$project$TalkTracker$onBlurWithTargetValue(
+																_user$project$TalkTracker$parseInt(_user$project$TalkTracker$SetNumMusic)),
+															_1: {ctor: '[]'}
+														}
+													}
 												}
-											}),
+											},
+											{ctor: '[]'}),
 										_1: {
 											ctor: '::',
 											_0: A2(
@@ -498,7 +495,7 @@ var _user$project$TalkTracker$view = function (model) {
 																	_0: list,
 																	_1: {
 																		ctor: '::',
-																		_0: A2(_elm_lang$core$List$repeat, model.numSpcMusic, 'Special Music Number'),
+																		_0: A2(_elm_lang$core$List$repeat, model.numSpcMusic, 'Special Musical Number'),
 																		_1: {
 																			ctor: '::',
 																			_0: _user$project$TalkTracker$postSpeakers,
@@ -778,13 +775,3 @@ var _user$project$TalkTracker$main = _elm_lang$html$Html$program(
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
-var _user$project$TalkTracker$Model = F2(
-	function (a, b) {
-		return {numSpeakers: a, numSpcMusic: b};
-	});
-var _user$project$TalkTracker$NumSpcMusic = function (a) {
-	return {ctor: 'NumSpcMusic', _0: a};
-};
-var _user$project$TalkTracker$SetNumSpeakers = function (a) {
-	return {ctor: 'SetNumSpeakers', _0: a};
-};
