@@ -116,6 +116,35 @@ parseInt msg string =
         msg parseResult
 
 
+{-- This is what I cannot figure out. 
+
+fillSpeakers : Int -> { Int : String }
+fillSpeakers = 
+    initialize numSpeakers ((+) 1 ) |> toRecord
+
+
+toRecord : ?
+toRecord array numSpeakers = 
+    case toList.array of
+        [] -> {}
+            
+        _ -> { numSpeakers = ""
+                   , ( numSpeakers - 1 ) = ""
+                   , ( numSpeakers - 2 ) = ""
+                   }
+----------------------------------------- Separate Option ------------------------------------------
+
+toRecord numSpeakers int = 
+    if (numSpeakers == 0) then {} else
+        case int of
+            numSpeakers -> { numSpeakers = ""
+                        , toRecord numSpeakers (int - 1)
+                        }
+
+            1 -> 1 = ""
+
+            int -> int = "", toRecord numSpeakers (int - 1)
+--}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = 
     case msg of
