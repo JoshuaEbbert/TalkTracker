@@ -144,7 +144,7 @@ toRecord numSpeakers int =
 
             1 -> 1 = ""
 
-            int -> int = "", toRecord numSpeakers (int - 1)
+            int -> int = "", toRecord numSpeakers (int - 1)              <---------- This branch may need to be fixed, but this function may work 
 --}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = 
