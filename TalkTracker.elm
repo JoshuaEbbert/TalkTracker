@@ -5,6 +5,7 @@ import Html.Attributes exposing (id, class, classList, src, name, type_, title, 
 import Html.Events exposing (on, targetValue)
 import Parser exposing (run, int)
 import Json.Decode as Json
+import Array exposing (initialize)
 
 {-- preSpeakers is a list containing the input fields that will be rendered before the speaker fields. --}
 preSpeakers : List String
@@ -60,8 +61,8 @@ view model =
               , input [ class "input section border", id "numSpeakerInput", placeholder "Number of Speakers (e.g. 4)", onBlurWithTargetValue (parseInt SetNumSpeakers) ] []
               , input [ class "input section border", id "numSpcMusicInput", placeholder "Total Special Musical Numbers (e.g. 1)", onBlurWithTargetValue (parseInt SetNumMusic) ] []
               , form [] ( model.numSpeakers
-                            |> (\num -> List.repeat num "Speaker")
-                            |> (\list -> List.concat [ preSpeakers, list, ( List.repeat model.numSpcMusic "Special Musical Number" ), postSpeakers ] )
+                            |> speakerList
+                            |> (\list -> List.concat [ preSpeakers, list, ( specialMusicNumberList model.numSpcMusic ), postSpeakers ] )
                             |> List.map viewInputField )
 
                         
@@ -97,6 +98,16 @@ view model =
 viewInputField : String -> Html Msg
 viewInputField name =
     div [] [ input [ class "input section border", placeholder name, required True, id (nameToId name) ] [] ]
+
+
+speakerList : Int -> List String 
+speakerList numSpeakers = 
+    Array.toList <| initialize numSpeakers (\int -> "Speaker#" ++ toString (int + 1))
+
+
+specialMusicNumberList : Int -> List String
+specialMusicNumberList numSpcMusic = 
+    Array.toList <| initialize numSpcMusic (\int -> "Special Music Number#" ++ toString (int + 1))
 
 
 nameToId : String -> String

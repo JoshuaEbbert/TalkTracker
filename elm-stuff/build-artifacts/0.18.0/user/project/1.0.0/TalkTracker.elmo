@@ -45,6 +45,30 @@ var _user$project$TalkTracker$nameToId = function (name) {
 				' ',
 				_elm_lang$core$String$toLower(name))));
 };
+var _user$project$TalkTracker$specialMusicNumberList = function (numSpcMusic) {
+	return _elm_lang$core$Array$toList(
+		A2(
+			_elm_lang$core$Array$initialize,
+			numSpcMusic,
+			function ($int) {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					'Special Music Number#',
+					_elm_lang$core$Basics$toString($int + 1));
+			}));
+};
+var _user$project$TalkTracker$speakerList = function (numSpeakers) {
+	return _elm_lang$core$Array$toList(
+		A2(
+			_elm_lang$core$Array$initialize,
+			numSpeakers,
+			function ($int) {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					'Speaker#',
+					_elm_lang$core$Basics$toString($int + 1));
+			}));
+};
 var _user$project$TalkTracker$viewInputField = function (name) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -495,7 +519,7 @@ var _user$project$TalkTracker$view = function (model) {
 																	_0: list,
 																	_1: {
 																		ctor: '::',
-																		_0: A2(_elm_lang$core$List$repeat, model.numSpcMusic, 'Special Musical Number'),
+																		_0: _user$project$TalkTracker$specialMusicNumberList(model.numSpcMusic),
 																		_1: {
 																			ctor: '::',
 																			_0: _user$project$TalkTracker$postSpeakers,
@@ -505,9 +529,7 @@ var _user$project$TalkTracker$view = function (model) {
 																}
 															});
 													}(
-														function (num) {
-															return A2(_elm_lang$core$List$repeat, num, 'Speaker');
-														}(model.numSpeakers)))),
+														_user$project$TalkTracker$speakerList(model.numSpeakers)))),
 											_1: {
 												ctor: '::',
 												_0: A2(
