@@ -131,6 +131,7 @@ toRecord array numSpeakers =
         _ -> { numSpeakers = ""
                    , ( numSpeakers - 1 ) = ""
                    , ( numSpeakers - 2 ) = ""
+                   , I don't know what to here. How do I know when to stop? Maybe do something with array.length and slice?
                    }
 ----------------------------------------- Separate Option ------------------------------------------
 
