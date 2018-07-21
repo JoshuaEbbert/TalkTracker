@@ -5,7 +5,7 @@ import Html.Attributes exposing (id, class, classList, src, name, type_, title, 
 import Html.Events exposing (on, targetValue)
 import Parser exposing (run, int)
 import Json.Decode as Json
-import Array exposing (initialize)
+import Array exposing (initialize, fromList, toList)
 
 {-- preSpeakers is a list containing the input fields that will be rendered before the speaker fields. --}
 preSpeakers : List String
@@ -95,6 +95,7 @@ view model =
         ]
 
 
+{-- Functions used to render inputs --}
 viewInputField : String -> Html Msg
 viewInputField name =
     div [] [ input [ class "input section border", placeholder name, required True, id (nameToId name) ] [] ]
@@ -127,25 +128,18 @@ parseInt msg string =
         msg parseResult
 
 
-{-- This is what I cannot figure out. 
+fixSpeakersRecord : Int -> Array.Array { int : String }
+fixSpeakersRecord numSpeakers = 
+    initialize numSpeakers ((+) 1 ) 
+        |> toList
+        |> (List.map (\int -> { int = ""} ) )
+        |> fromList
+        
 
-fillSpeakers : Int -> { Int : String }
-fillSpeakers = 
-    initialize numSpeakers ((+) 1 ) |> toRecord
+toRecord : a -> { int : String }
+toRecord int =  { int = "" }
 
-
-toRecord : ?
-toRecord array numSpeakers = 
-    case toList.array of
-        [] -> {}
-            
-        _ -> { numSpeakers = ""
-                   , ( numSpeakers - 1 ) = ""
-                   , ( numSpeakers - 2 ) = ""
-                   , I don't know what to here. How do I know when to stop? Maybe do something with array.length and slice?
-                   }
------------------------------------------ Separate Option ------------------------------------------
-
+{-- Backup
 toRecord numSpeakers int = 
     if (numSpeakers == 0) then {} else
         case int of
@@ -155,13 +149,13 @@ toRecord numSpeakers int =
 
             1 -> 1 = ""
 
-            int -> int = "", toRecord numSpeakers (int - 1)              <---------- This branch may need to be fixed, but this function has potential
+            int -> int = "", toRecord numSpeakers (int - 1)   
 --}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = 
     case msg of
         SetNumSpeakers (Ok numSpeakers) ->
-            ( { model | numSpeakers = numSpeakers }, Cmd.none )
+            ( { model | numSpeakers = numSpeakers, speakers = fixSpeakersRecord numSpeakers }, Cmd.none )
         
         SetNumSpeakers (Err _) ->
             (model, Cmd.none)
@@ -179,12 +173,15 @@ type Msg
 
 
 initialModel : Model
-initialModel = { numSpeakers = 3 
-               , numSpcMusic = 0 }
+initialModel = { numSpeakers = 0
+               , numSpcMusic = 0 
+               , speakers = fixSpeakersRecord 0
+               }
 
 
 type alias Model = { numSpeakers : Int
-                   , numSpcMusic : Int }
+                   , numSpcMusic : Int 
+                   , speakers : Array.Array { int : String } }
 
 
 main : Program Never Model Msg

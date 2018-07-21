@@ -9158,17 +9158,39 @@ var _elm_tools$parser$Parser$AtLeast = function (a) {
 var _elm_tools$parser$Parser$zeroOrMore = _elm_tools$parser$Parser$AtLeast(0);
 var _elm_tools$parser$Parser$oneOrMore = _elm_tools$parser$Parser$AtLeast(1);
 
-var _user$project$TalkTracker$initialModel = {numSpeakers: 3, numSpcMusic: 0};
+var _user$project$TalkTracker$toRecord = function ($int) {
+	return {$int: ''};
+};
+var _user$project$TalkTracker$fixSpeakersRecord = function (numSpeakers) {
+	return _elm_lang$core$Array$fromList(
+		A2(
+			_elm_lang$core$List$map,
+			function ($int) {
+				return {$int: ''};
+			},
+			_elm_lang$core$Array$toList(
+				A2(
+					_elm_lang$core$Array$initialize,
+					numSpeakers,
+					F2(
+						function (x, y) {
+							return x + y;
+						})(1)))));
+};
 var _user$project$TalkTracker$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
 		if (_p0.ctor === 'SetNumSpeakers') {
 			if (_p0._0.ctor === 'Ok') {
+				var _p1 = _p0._0._0;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{numSpeakers: _p0._0._0}),
+						{
+							numSpeakers: _p1,
+							speakers: _user$project$TalkTracker$fixSpeakersRecord(_p1)
+						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			} else {
@@ -9188,6 +9210,11 @@ var _user$project$TalkTracker$update = F2(
 			}
 		}
 	});
+var _user$project$TalkTracker$initialModel = {
+	numSpeakers: 0,
+	numSpcMusic: 0,
+	speakers: _user$project$TalkTracker$fixSpeakersRecord(0)
+};
 var _user$project$TalkTracker$parseInt = F2(
 	function (msg, string) {
 		var parseResult = A2(_elm_tools$parser$Parser$run, _elm_tools$parser$Parser$int, string);
@@ -9311,9 +9338,9 @@ var _user$project$TalkTracker$preSpeakers = {
 		}
 	}
 };
-var _user$project$TalkTracker$Model = F2(
-	function (a, b) {
-		return {numSpeakers: a, numSpcMusic: b};
+var _user$project$TalkTracker$Model = F3(
+	function (a, b, c) {
+		return {numSpeakers: a, numSpcMusic: b, speakers: c};
 	});
 var _user$project$TalkTracker$SetNumMusic = function (a) {
 	return {ctor: 'SetNumMusic', _0: a};
@@ -9953,7 +9980,7 @@ var _user$project$TalkTracker$main = _elm_lang$html$Html$program(
 		init: {ctor: '_Tuple2', _0: _user$project$TalkTracker$initialModel, _1: _elm_lang$core$Platform_Cmd$none},
 		view: _user$project$TalkTracker$view,
 		update: _user$project$TalkTracker$update,
-		subscriptions: function (_p1) {
+		subscriptions: function (_p2) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
