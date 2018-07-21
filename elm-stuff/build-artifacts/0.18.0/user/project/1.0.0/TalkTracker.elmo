@@ -1,6 +1,22 @@
 var _user$project$TalkTracker$toRecord = function ($int) {
 	return {$int: ''};
 };
+var _user$project$TalkTracker$fixSpcMusicalNumbersRecord = function (numSpcMusic) {
+	return _elm_lang$core$Array$fromList(
+		A2(
+			_elm_lang$core$List$map,
+			function ($int) {
+				return {$int: ''};
+			},
+			_elm_lang$core$Array$toList(
+				A2(
+					_elm_lang$core$Array$initialize,
+					numSpcMusic,
+					F2(
+						function (x, y) {
+							return x + y;
+						})(1)))));
+};
 var _user$project$TalkTracker$fixSpeakersRecord = function (numSpeakers) {
 	return _elm_lang$core$Array$fromList(
 		A2(
@@ -38,11 +54,15 @@ var _user$project$TalkTracker$update = F2(
 			}
 		} else {
 			if (_p0._0.ctor === 'Ok') {
+				var _p2 = _p0._0._0;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{numSpcMusic: _p0._0._0}),
+						{
+							numSpcMusic: _p2,
+							spcMusicalNumbers: _user$project$TalkTracker$fixSpcMusicalNumbersRecord(_p2)
+						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			} else {
@@ -53,7 +73,19 @@ var _user$project$TalkTracker$update = F2(
 var _user$project$TalkTracker$initialModel = {
 	numSpeakers: 0,
 	numSpcMusic: 0,
-	speakers: _user$project$TalkTracker$fixSpeakersRecord(0)
+	ward: 'No Input Yet',
+	date: 'No Input Yet',
+	time: 'No Input Yet',
+	conducting: 'No Input Yet',
+	organist: 'No Input Yet',
+	chorister: 'No Input Yet',
+	openingHymn: 'No Input Yet',
+	invocation: 'No Input Yet',
+	sacramentHymn: 'No Input Yet',
+	speakers: _user$project$TalkTracker$fixSpeakersRecord(0),
+	spcMusicalNumbers: _user$project$TalkTracker$fixSpcMusicalNumbersRecord(0),
+	closingHymn: 'No Input Yet',
+	benediction: 'No Input Yet'
 };
 var _user$project$TalkTracker$parseInt = F2(
 	function (msg, string) {
@@ -178,10 +210,37 @@ var _user$project$TalkTracker$preSpeakers = {
 		}
 	}
 };
-var _user$project$TalkTracker$Model = F3(
-	function (a, b, c) {
-		return {numSpeakers: a, numSpcMusic: b, speakers: c};
-	});
+var _user$project$TalkTracker$Model = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return function (l) {
+												return function (m) {
+													return function (n) {
+														return function (o) {
+															return {numSpeakers: a, numSpcMusic: b, ward: c, date: d, time: e, conducting: f, organist: g, chorister: h, openingHymn: i, invocation: j, sacramentHymn: k, speakers: l, spcMusicalNumbers: m, closingHymn: n, benediction: o};
+														};
+													};
+												};
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 var _user$project$TalkTracker$SetNumMusic = function (a) {
 	return {ctor: 'SetNumMusic', _0: a};
 };
@@ -820,7 +879,7 @@ var _user$project$TalkTracker$main = _elm_lang$html$Html$program(
 		init: {ctor: '_Tuple2', _0: _user$project$TalkTracker$initialModel, _1: _elm_lang$core$Platform_Cmd$none},
 		view: _user$project$TalkTracker$view,
 		update: _user$project$TalkTracker$update,
-		subscriptions: function (_p2) {
+		subscriptions: function (_p3) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();

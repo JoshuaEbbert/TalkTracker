@@ -132,9 +132,17 @@ fixSpeakersRecord : Int -> Array.Array { int : String }
 fixSpeakersRecord numSpeakers = 
     initialize numSpeakers ((+) 1 ) 
         |> toList
-        |> (List.map (\int -> { int = ""} ) )
+        |> (List.map (\int -> { int = "" } ) )
         |> fromList
-        
+
+
+fixSpcMusicalNumbersRecord : Int -> Array.Array { int : String }
+fixSpcMusicalNumbersRecord numSpcMusic = 
+    initialize numSpcMusic ((+) 1 ) 
+        |> toList
+        |> (List.map (\int -> { int = "" } ) )
+        |> fromList
+
 
 toRecord : a -> { int : String }
 toRecord int =  { int = "" }
@@ -161,7 +169,7 @@ update msg model =
             (model, Cmd.none)
 
         SetNumMusic (Ok numSpcMusic) ->
-            ( { model | numSpcMusic = numSpcMusic }, Cmd.none )
+            ( { model | numSpcMusic = numSpcMusic, spcMusicalNumbers = fixSpcMusicalNumbersRecord numSpcMusic }, Cmd.none )
         
         SetNumMusic (Err _) ->
             (model, Cmd.none)
@@ -175,13 +183,38 @@ type Msg
 initialModel : Model
 initialModel = { numSpeakers = 0
                , numSpcMusic = 0 
+               , ward = "No Input Yet"
+               , date = "No Input Yet"
+               , time = "No Input Yet"
+               , conducting = "No Input Yet"
+               , organist = "No Input Yet"
+               , chorister = "No Input Yet"
+               , openingHymn = "No Input Yet"
+               , invocation = "No Input Yet"
+               , sacramentHymn = "No Input Yet"
                , speakers = fixSpeakersRecord 0
+               , spcMusicalNumbers = fixSpcMusicalNumbersRecord 0
+               , closingHymn = "No Input Yet"
+               , benediction = "No Input Yet"
                }
 
 
 type alias Model = { numSpeakers : Int
                    , numSpcMusic : Int 
-                   , speakers : Array.Array { int : String } }
+                   , ward : String
+                   , date : String
+                   , time : String
+                   , conducting : String
+                   , organist : String
+                   , chorister : String
+                   , openingHymn : String
+                   , invocation : String
+                   , sacramentHymn : String
+                   , speakers : Array.Array { int : String } 
+                   , spcMusicalNumbers : Array.Array { int : String }
+                   , closingHymn : String
+                   , benediction : String
+                   }
 
 
 main : Program Never Model Msg
