@@ -6,10 +6,13 @@ import Html.Events exposing (on, targetValue)
 import Parser exposing (run, int)
 import Json.Decode as Json
 import Array exposing (initialize, fromList, toList)
+import Bootstrap.Form exposing (help)
+import Regex exposing (Regex)
+import String.Case exposing (toCamelCaseLower)
 
 {-- preSpeakers is a list containing the input fields that will be rendered before the speaker fields. --}
 preSpeakers : List String
-preSpeakers =  [ "Ward", "Date", "Time", "Conducting", "Organist", "Chorister", "Opening Hymn", "Invocation", "Sacrament Hymn" ]
+preSpeakers =  [ "Number of Speakers", "Total Special Musical Numbers", "Ward", "Date", "Time", "Conducting", "Organist", "Chorister", "Opening Hymn", "Invocation", "Sacrament Hymn" ]
 
 
 {-- postSpeakers is a list containing the input fields that will follow the speaker fields --}
@@ -58,8 +61,8 @@ view model =
         {-- Sacrament Meeting Program Section --}
               [ div [ class "container padding-32", id "sacrament-meeting-program" ] [ h3 [ class "border-bottom border-light-grey padding-16" ] [ text "Sacrament Meeting Program" ] ]
               , div [ class "row-padding" ] []
-              , input [ class "input section border", id "numSpeakerInput", placeholder "Number of Speakers (e.g. 4)", onBlurWithTargetValue (parseInt SetNumSpeakers) ] []
-              , input [ class "input section border", id "numSpcMusicInput", placeholder "Total Special Musical Numbers (e.g. 1)", onBlurWithTargetValue (parseInt SetNumMusic) ] []
+{--              , input [ class "input section border", id "numSpeakerInput", placeholder "Number of Speakers (e.g. 4)", onBlurWithTargetValue (parseInt SetNumSpeakers) ] []
+              , input [ class "input section border", id "numSpcMusicInput", placeholder "Total Special Musical Numbers (e.g. 1)", onBlurWithTargetValue (parseInt SetNumMusic) ] []  --}
               , form [] ( model.numSpeakers
                             |> speakerList
                             |> (\list -> List.concat [ preSpeakers, list, ( specialMusicNumberList model.numSpcMusic ), postSpeakers ] )
@@ -95,10 +98,129 @@ view model =
         ]
 
 
-{-- Functions used to render inputs --}
+{-- Functions used for input fields --}
 viewInputField : String -> Html Msg
 viewInputField name =
-    div [] [ input [ class "input section border", placeholder name, required True, id (nameToId name) ] [] ]
+    div [] [ input [ class "input section border", placeholder name, required True, id (nameToId name), onChange (validateField name) ] [] 
+        , help [] [ helpText name ]
+        ]
+
+
+helpText : Html msg
+helpText name = 
+    let
+        name = toCamelCaseLower name
+    in
+        text model.help.name
+
+
+validateField name value = 
+    case name of 
+        "Number of Speakers" ->
+            case (run int value) of
+                Ok num ->
+                    SetNumSpeakers (Ok num)
+
+                Err _ ->
+                    SetNumSpeakers (Err "Please enter a whole number (e.g. 4)")
+
+        "Total Special Musical Numbers" ->
+            case (run int value) of
+                Ok num ->
+                    SetNumMusic (Ok num)
+
+                Err _ ->
+                    SetNumMusic (Err "Please enter a whole number (e.g. 4)")
+
+        "Ward" ->
+            case value of
+                "" ->
+                    SetWard (Err "Please enter a Ward")
+
+                _ ->
+                    SetWard (Ok value)
+
+        "Date" ->
+            case value of 
+                Regex "\\d\\d/\\d\\d/\\d\\d" ->
+                    SetDate (Ok value)
+
+                _ -> 
+                    SetDate (Err "Please enter a valid date (e.g. 04/09/18)")
+        "Time" ->
+            case value of
+                Regex "\\d\\d:\\d\\d" ->
+                    SetTime (Ok value)
+
+                _ ->
+                    SetTime (Err "Please enter a valid time (e.g. 12:00 a.m.)")
+
+        "Conducting" ->
+            case value of
+                "" ->
+                    SetConducting (Err "Please enter the name of the person who will be conducting")
+
+                _ ->
+                    SetConducting (Ok value)
+
+        "Organist" ->
+            case value of
+                "" ->
+                    SetOrganist (Err "Please enter an organist")
+
+                _ ->
+                    SetOrganist (Ok value)
+
+        "Chorister" ->
+            case value of
+                "" ->
+                    SetChorister (Err "Please enter a chorister")
+
+                _ ->
+                    SetChorister (Ok value)
+
+        "Opening Hymn" ->
+            case value of
+                "" ->
+                    SetOpeningHymn (Err "Please enter an opening hymn")
+
+                _ ->
+                    SetOpeningHymn (Ok value)
+
+        "Invocation" ->
+            case value of
+                "" ->
+                    SetInvocation (Err "Please enter a name for the invocation")
+
+                _ ->
+                    SetInvocation (Ok value)
+
+        "Sacrament Hymn" ->
+            case value of
+                "" ->
+                    SetSacramentHymn (Err "Please enter a sacrament hymn")
+
+                _ ->
+                    SetSacramentHymn (Ok value)
+
+        "Closing Hymn" ->
+            case value of
+                "" ->
+                    SetClosingHymn (Err "Please enter a closing hymn")
+
+                _ ->
+                    SetClosingHymn (Ok value)
+
+        "Benediction" ->
+            case value of
+                "" ->
+                    SetBenediction (Err "Please enter a name for the benediction")
+
+                _ ->
+                    SetBenediction (Ok value)
+
+        {-- How will I account for the speaker and special musical number inputs? --}
+        _ -> SetSpeakerAndSpcMusic
 
 
 speakerList : Int -> List String 
@@ -164,21 +286,104 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = 
     case msg of
         SetNumSpeakers (Ok numSpeakers) ->
-            ( { model | numSpeakers = numSpeakers, speakers = fixSpeakersRecord numSpeakers }, Cmd.none )
+            ( { model | numSpeakers = numSpeakers, speakers = fixSpeakersRecord numSpeakers, help.numSpeakers = "" }, Cmd.none )
         
-        SetNumSpeakers (Err _) ->
-            (model, Cmd.none)
+        SetNumSpeakers (Err msg) ->
+            ( { model | help.numSpeakers = msg }, Cmd.none)
 
         SetNumMusic (Ok numSpcMusic) ->
-            ( { model | numSpcMusic = numSpcMusic, spcMusicalNumbers = fixSpcMusicalNumbersRecord numSpcMusic }, Cmd.none )
+            ( { model | numSpcMusic = numSpcMusic, spcMusicalNumbers = fixSpcMusicalNumbersRecord numSpcMusic, help.numSpcMusic = "" }, Cmd.none )
         
-        SetNumMusic (Err _) ->
-            (model, Cmd.none)
+        SetNumMusic (Err msg) ->
+            ( { model | help.numSpcMusic = msg }, Cmd.none)
+
+        SetWard (Ok value) ->
+            ( { model | ward = value, help.ward = "" }, Cmd.none )
+
+        SetWard (Err msg) ->
+            ( { model | help.ward = msg }, Cmd.none )
+
+        SetDate (Ok value) ->
+            ( { model | date = value, help.date = "" }, Cmd.none )
+
+        SetDate (Err msg) ->
+            ( { model | help.date = msg }, Cmd.none )
+
+        SetTime (Ok value) ->
+            ( { model | time = value, help.time = "" }, Cmd.none )
+
+        SetTime (Err msg) ->
+            ( { model | help.time = msg }, Cmd.none )
+
+        SetConducting (Ok value) ->
+            ( { model | conducting = value, help.conducting = "" }, Cmd.none )
+
+        SetConducting (Err msg) ->
+            ( { model | help.conducting = msg }, Cmd.none )
+
+        SetOrganist (Ok value) ->
+            ( { model | organist = value, help.organist = "" }, Cmd.none )
+
+        SetOrganist (Err msg) ->
+            ( { model | help.organist = msg }, Cmd.none )
+
+        SetChorister (Ok value) ->
+            ( { model | chorister = value, help.chorister = "" }, Cmd.none )
+
+        SetChorister (Err msg) ->
+            ( { model | help.chorister = msg }, Cmd.none )
+
+        SetOpeningHymn (Ok value) ->
+            ( { model | openingHymn = value, help.openingHymn = "" }, Cmd.none )
+
+        SetOpeningHymn (Err msg) ->
+            ( { model | help.openingHymn = msg }, Cmd.none )
+
+        SetInvocation (Ok value) ->
+            ( { model | invocation = value, help.invocation = "" }, Cmd.none )
+
+        SetInvocation (Err msg) ->
+            ( { model | help.invocation = msg }, Cmd.none )
+
+        SetSacramentHymn (Ok value) ->
+            ( { model | sacramentHymn = value, help.sacramentHymn = "" }, Cmd.none )
+
+        SetSacramentHymn (Err msg) ->
+            ( { model | help.sacramentHymn = msg }, Cmd.none )
+
+        SetSpeakersAndSpcMusic ->
+            ( model, Cmd.none )
+
+        SetClosingHymn (Ok value) ->
+            ( { model | closingHymn = value, help.closingHymn = "" }, Cmd.none )
+
+        SetClosingHymn (Err msg) ->
+            ( { model | help.closingHymn = msg }, Cmd.none )
+
+        SetBenediction (Ok value) ->
+            ( { model | benediction = value, help.benediction = "" }, Cmd.none )
+
+        SetBenediction (Err msg) ->
+            ( { model | help.benediction = msg }, Cmd.none )
+
+        
 
 
 type Msg
-    = SetNumSpeakers (Result Parser.Error Int)
-    | SetNumMusic (Result Parser.Error Int)
+    = SetNumSpeakers (Result (Err msg) (Ok value) )
+    | SetNumMusic (Result (Err msg) (Ok value) )
+    | SetWard (Result (Err msg) (Ok value) )
+    | SetDate (Result (Err msg) (Ok value) )
+    | SetTime (Result (Err msg) (Ok value) )
+    | SetConducting (Result (Err msg) (Ok value) )
+    | SetOrganist (Result (Err msg) (Ok value) )
+    | SetChorister (Result (Err msg) (Ok value) )
+    | SetOpeningHymn (Result (Err msg) (Ok value) )
+    | SetInvocation (Result (Err msg) (Ok value) )
+    | SetSacramentHymn (Result (Err msg) (Ok value) )
+    | SetSpeakersAndSpcMusic
+    | SetClosingHymn (Result (Err msg) (Ok value) )
+    | SetBenediction (Result (Err msg) (Ok value) )
 
 
 initialModel : Model
@@ -197,6 +402,22 @@ initialModel = { numSpeakers = 0
                , spcMusicalNumbers = fixSpcMusicalNumbersRecord 0
                , closingHymn = "No Input Yet"
                , benediction = "No Input Yet"
+               , help = { numSpeakers = ""
+                        , numSpcMusic = ""
+                        , ward = ""
+                        , date = ""
+                        , time = ""
+                        , conducting = ""
+                        , organist = ""
+                        , chorister = ""
+                        , openingHymn = ""
+                        , invocation = ""
+                        , sacramentHymn = ""
+                        , speakers = ""
+                        , spcMusicalNumbers = ""
+                        , closingHymn = ""
+                        , benediction = ""
+                        }
                }
 
 
@@ -215,6 +436,22 @@ type alias Model = { numSpeakers : Int
                    , spcMusicalNumbers : Array.Array { int : String }
                    , closingHymn : String
                    , benediction : String
+                   , help = { numSpeakers = String
+                        , numSpcMusic = String
+                        , ward = String
+                        , date = String
+                        , time = String
+                        , conducting = String
+                        , organist = String
+                        , chorister = String
+                        , openingHymn = String
+                        , invocation = String
+                        , sacramentHymn = String
+                        , speakers = String
+                        , spcMusicalNumbers = String
+                        , closingHymn = String
+                        , benediction = String
+                        }
                    }
 
 

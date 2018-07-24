@@ -1,0 +1,186 @@
+var _the_sett$elm_string_case$String_Case$isLetterOrDigit = function ($char) {
+	return _elm_lang$core$Char$isUpper($char) || (_elm_lang$core$Char$isLower($char) || _elm_lang$core$Char$isDigit($char));
+};
+var _the_sett$elm_string_case$String_Case$isUpperCase = _elm_lang$core$Char$isUpper;
+var _the_sett$elm_string_case$String_Case$State = F6(
+	function (a, b, c, d, e, f) {
+		return {machine: a, firstWord: b, firstLetter: c, upper: d, currentWord: e, words: f};
+	});
+var _the_sett$elm_string_case$String_Case$ContinueWordLower = {ctor: 'ContinueWordLower'};
+var _the_sett$elm_string_case$String_Case$ContinueWordCaps = {ctor: 'ContinueWordCaps'};
+var _the_sett$elm_string_case$String_Case$StartWord = {ctor: 'StartWord'};
+var _the_sett$elm_string_case$String_Case$Initial = {ctor: 'Initial'};
+var _the_sett$elm_string_case$String_Case$split = F3(
+	function (firstLetterUpper, firstLetterOfWordUpper, value) {
+		var stateTxWhitespace = F2(
+			function ($char, state) {
+				return _elm_lang$core$Native_Utils.update(
+					state,
+					{machine: _the_sett$elm_string_case$String_Case$Initial, upper: false});
+			});
+		var writeChar = F2(
+			function ($char, state) {
+				return (((!state.firstLetter) && state.upper) || (state.firstLetter && firstLetterUpper)) ? _elm_lang$core$Native_Utils.update(
+					state,
+					{
+						currentWord: {
+							ctor: '::',
+							_0: _elm_lang$core$Char$toUpper($char),
+							_1: state.currentWord
+						}
+					}) : _elm_lang$core$Native_Utils.update(
+					state,
+					{
+						currentWord: {
+							ctor: '::',
+							_0: _elm_lang$core$Char$toLower($char),
+							_1: state.currentWord
+						}
+					});
+			});
+		var wordBreak = F2(
+			function (condition, state) {
+				return condition ? _elm_lang$core$Native_Utils.update(
+					state,
+					{
+						words: {
+							ctor: '::',
+							_0: _elm_lang$core$String$fromList(
+								_elm_lang$core$List$reverse(state.currentWord)),
+							_1: state.words
+						},
+						currentWord: {ctor: '[]'}
+					}) : _elm_lang$core$Native_Utils.update(
+					state,
+					{words: state.words, currentWord: state.currentWord});
+			});
+		var stateTxUpperCase = F2(
+			function ($char, state) {
+				return function (state) {
+					return _elm_lang$core$Native_Utils.update(
+						state,
+						{firstLetter: false});
+				}(
+					A2(
+						writeChar,
+						$char,
+						function () {
+							var _p0 = state.machine;
+							switch (_p0.ctor) {
+								case 'Initial':
+									return A2(
+										wordBreak,
+										!state.firstWord,
+										_elm_lang$core$Native_Utils.update(
+											state,
+											{machine: _the_sett$elm_string_case$String_Case$StartWord, upper: firstLetterOfWordUpper, firstWord: false}));
+								case 'StartWord':
+									return _elm_lang$core$Native_Utils.update(
+										state,
+										{machine: _the_sett$elm_string_case$String_Case$ContinueWordCaps, upper: false});
+								case 'ContinueWordCaps':
+									return _elm_lang$core$Native_Utils.update(
+										state,
+										{machine: _the_sett$elm_string_case$String_Case$ContinueWordCaps, upper: false});
+								default:
+									return A2(
+										wordBreak,
+										true,
+										_elm_lang$core$Native_Utils.update(
+											state,
+											{machine: _the_sett$elm_string_case$String_Case$StartWord, upper: firstLetterOfWordUpper}));
+							}
+						}()));
+			});
+		var stateTxLetterOrDigit = F2(
+			function ($char, state) {
+				return function (state) {
+					return _elm_lang$core$Native_Utils.update(
+						state,
+						{firstLetter: false});
+				}(
+					A2(
+						writeChar,
+						$char,
+						function () {
+							var _p1 = state.machine;
+							switch (_p1.ctor) {
+								case 'Initial':
+									return A2(
+										wordBreak,
+										!state.firstWord,
+										_elm_lang$core$Native_Utils.update(
+											state,
+											{machine: _the_sett$elm_string_case$String_Case$StartWord, upper: firstLetterOfWordUpper, firstWord: false}));
+								case 'StartWord':
+									return _elm_lang$core$Native_Utils.update(
+										state,
+										{machine: _the_sett$elm_string_case$String_Case$ContinueWordLower, upper: false});
+								case 'ContinueWordCaps':
+									return _elm_lang$core$Native_Utils.update(
+										state,
+										{machine: _the_sett$elm_string_case$String_Case$ContinueWordLower, upper: false});
+								default:
+									return _elm_lang$core$Native_Utils.update(
+										state,
+										{machine: _the_sett$elm_string_case$String_Case$ContinueWordLower, upper: false});
+							}
+						}()));
+			});
+		var stateFn = F2(
+			function ($char, state) {
+				return _the_sett$elm_string_case$String_Case$isUpperCase($char) ? A2(stateTxUpperCase, $char, state) : (_the_sett$elm_string_case$String_Case$isLetterOrDigit($char) ? A2(stateTxLetterOrDigit, $char, state) : A2(stateTxWhitespace, $char, state));
+			});
+		var appendLastWord = function (state) {
+			return _elm_lang$core$Native_Utils.eq(
+				state.currentWord,
+				{ctor: '[]'}) ? state : A2(wordBreak, true, state);
+		};
+		var start = {
+			machine: _the_sett$elm_string_case$String_Case$Initial,
+			firstWord: true,
+			firstLetter: true,
+			upper: false,
+			currentWord: {ctor: '[]'},
+			words: {ctor: '[]'}
+		};
+		return function (_) {
+			return _.words;
+		}(
+			appendLastWord(
+				A3(
+					_elm_lang$core$List$foldl,
+					F2(
+						function ($char, state) {
+							return A2(stateFn, $char, state);
+						}),
+					start,
+					_elm_lang$core$String$toList(value))));
+	});
+var _the_sett$elm_string_case$String_Case$convertCase = F4(
+	function (separator, firstLetterUpper, firstLetterOfWordUpper, value) {
+		return _elm_lang$core$String$concat(
+			A2(
+				_elm_lang$core$List$intersperse,
+				separator,
+				_elm_lang$core$List$reverse(
+					A3(_the_sett$elm_string_case$String_Case$split, firstLetterUpper, firstLetterOfWordUpper, value))));
+	});
+var _the_sett$elm_string_case$String_Case$toCamelCaseUpper = function (name) {
+	return A4(_the_sett$elm_string_case$String_Case$convertCase, '', true, true, name);
+};
+var _the_sett$elm_string_case$String_Case$toCamelCaseLower = function (name) {
+	return A4(_the_sett$elm_string_case$String_Case$convertCase, '', false, true, name);
+};
+var _the_sett$elm_string_case$String_Case$toSnakeCaseUpper = function (name) {
+	return A4(_the_sett$elm_string_case$String_Case$convertCase, '_', true, true, name);
+};
+var _the_sett$elm_string_case$String_Case$toSnakeCaseLower = function (name) {
+	return A4(_the_sett$elm_string_case$String_Case$convertCase, '_', false, false, name);
+};
+var _the_sett$elm_string_case$String_Case$toKebabCaseUpper = function (name) {
+	return A4(_the_sett$elm_string_case$String_Case$convertCase, '-', true, true, name);
+};
+var _the_sett$elm_string_case$String_Case$toKebabCaseLower = function (name) {
+	return A4(_the_sett$elm_string_case$String_Case$convertCase, '-', false, false, name);
+};
