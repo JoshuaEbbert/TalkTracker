@@ -7,7 +7,7 @@ import Parser exposing (run, int)
 import Json.Decode as Json
 import Array exposing (initialize, fromList, toList)
 import Bootstrap.Form exposing (help)
-import Regex exposing (Regex)
+import Regex exposing (regex)
 import String.Case exposing (toCamelCaseLower)
 
 {-- preSpeakers is a list containing the input fields that will be rendered before the speaker fields. --}
@@ -109,7 +109,7 @@ viewInputField name =
 helpText : String -> Html msg
 helpText name = 
     let
-        newName = toCamelCaseLower name
+        newName = toCamelCaseLower name         {-- Adjust for numSpeakers, Speakers, etc. --}
     in
         text model.help.newName
 
@@ -142,7 +142,7 @@ validateField name value =
 
         "Date" ->
             case value of 
-                "12/12/18" -> {-- I will work with the RegEx later --}
+                "12/12/18" ->                       {-- I will work with the RegEx later --}
                     SetDate (Ok value)
 
                 _ -> 
@@ -219,8 +219,24 @@ validateField name value =
                 _ ->
                     SetBenediction (Ok value)
 
-        {-- How will I account for the speaker and special musical number inputs? --}
-        _ -> SetSpeakersAndSpcMusic
+        contains (regex "^(Speaker#\\d*)$") ->      {-- fix regEx --}
+            case value of
+                "" -> 
+                    SetSpeaker (Err "Please fill the all the speaker fields")
+
+                _ ->
+                    SetSpeaker ( Ok (value, name) )
+
+        contains (regex "^(Special\\sMusical\\sNumber#\\d*)$") ->           {-- fix regEx --}
+            case value of
+                "" ->
+                    SetSpecialMusicalNumber (Err "Please fill all the special musical number fields")
+
+                _ -> 
+                    SetSpecialMusicalNumber ( Ok (value, name) )
+
+        _ -> 
+            Err
 
 
 speakerList : Int -> List String 
@@ -230,7 +246,7 @@ speakerList numSpeakers =
 
 specialMusicNumberList : Int -> List String
 specialMusicNumberList numSpcMusic = 
-    Array.toList <| initialize numSpcMusic (\int -> "Special Music Number#" ++ toString (int + 1))
+    Array.toList <| initialize numSpcMusic (\int -> "Special Musical Number#" ++ toString (int + 1))
 
 
 nameToId : String -> String
@@ -359,9 +375,6 @@ update msg model =
         SetSacramentHymn (Err helpMsg) ->
             ( { model | help = ( newHelp helpMsg "sacramentHymn" ) }, Cmd.none )
 
-        SetSpeakersAndSpcMusic ->
-            ( model, Cmd.none )
-
         SetClosingHymn (Ok value) ->
             ( { model | closingHymn = value, help = ( newHelp "" "closingHymn" ) }, Cmd.none )
 
@@ -373,6 +386,21 @@ update msg model =
 
         SetBenediction (Err helpMsg) ->
             ( { model | help = ( newHelp helpMsg "benediction" ) }, Cmd.none )
+
+        SetSpeaker (Ok (speaker, name)) ->
+            ( model, Cmd.none )                                             {-- Name -> search for number -> subtract one -> index -> change record --}
+
+        SetSpeaker (Err helpMsg) ->
+            ( { model | help = ( newHelp helpMsg "speakers" ) }, Cmd.none ) {-- Maybe redo speakers field of help... --}
+
+        SetSpecialMusicalNumber (Ok (spcMusicalNum, name)) ->
+            ( model, Cmd.none )
+
+        SetSpecialMusicalNumber (Err helpMsg) ->
+            ( { model | help = ( newHelp helpMsg "spcMusicalNumbers" ) }, Cmd.none )
+
+        Err ->
+            ( model, Cmd.none )
 
         
 type Value 
@@ -392,10 +420,11 @@ type Msg
     | SetOpeningHymn (Result String String)
     | SetInvocation (Result String String)
     | SetSacramentHymn (Result String String)
-    | SetSpeakersAndSpcMusic
     | SetClosingHymn (Result String String)
     | SetBenediction (Result String String)
-
+    | SetSpeaker (Result (String, String) String)
+    | SetSpecialMusicalNumber (Result (String, String) String)
+    | Err
 
 initialModel : Model
 initialModel = { numSpeakers = 0
