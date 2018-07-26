@@ -106,12 +106,12 @@ viewInputField name =
         ]
 
 
-helpText : Html msg
+helpText : String -> Html msg
 helpText name = 
     let
-        name = toCamelCaseLower name
+        newName = toCamelCaseLower name
     in
-        text model.help.name
+        text model.help.newName
 
 
 validateField name value = 
@@ -294,85 +294,85 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = 
     case msg of
         SetNumSpeakers (Ok numSpeakersInput) ->
-            ( { model | numSpeakers = numSpeakersInput, speakers = fixSpeakersRecord numSpeakersInput, help = ( newHelp "" numSpeakers ) }, Cmd.none )
+            ( { model | numSpeakers = numSpeakersInput, speakers = fixSpeakersRecord numSpeakersInput, help = ( newHelp "" "numSpeakers" ) }, Cmd.none )
         
         SetNumSpeakers (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg numSpeakers ) }, Cmd.none)
+            ( { model | help = ( newHelp helpMsg "numSpeakers" ) }, Cmd.none)
 
         SetNumMusic (Ok numSpcMusicInput) ->
-            ( { model | numSpcMusic = numSpcMusicInput, spcMusicalNumbers = fixSpcMusicalNumbersRecord numSpcMusicInput, help = ( newHelp "" numSpcMusic ) }, Cmd.none )
+            ( { model | numSpcMusic = numSpcMusicInput, spcMusicalNumbers = fixSpcMusicalNumbersRecord numSpcMusicInput, help = ( newHelp "" "numSpcMusic" ) }, Cmd.none )
         
         SetNumMusic (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg numSpcMusic ) }, Cmd.none)
+            ( { model | help = ( newHelp helpMsg "numSpcMusic" ) }, Cmd.none)
 
         SetWard (Ok value) ->
-            ( { model | ward = value, help = ( newHelp "" ward ) }, Cmd.none )
+            ( { model | ward = value, help = ( newHelp "" "ward" ) }, Cmd.none )
 
         SetWard (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg ward ) }, Cmd.none )
+            ( { model | help = ( newHelp helpMsg "ward" ) }, Cmd.none )
 
         SetDate (Ok value) ->
-            ( { model | date = value, help = ( newHelp "" date ) }, Cmd.none )
+            ( { model | date = value, help = ( newHelp "" "date" ) }, Cmd.none )
 
         SetDate (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg date ) }, Cmd.none )
+            ( { model | help = ( newHelp helpMsg "date" ) }, Cmd.none )
 
         SetTime (Ok value) ->
-            ( { model | time = value, help = ( newHelp "" time ) }, Cmd.none )
+            ( { model | time = value, help = ( newHelp "" "time" ) }, Cmd.none )
 
         SetTime (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg time ) }, Cmd.none )
+            ( { model | help = ( newHelp helpMsg "time" ) }, Cmd.none )
 
         SetConducting (Ok value) ->
-            ( { model | conducting = value, help = ( newHelp "" conducting ) }, Cmd.none )
+            ( { model | conducting = value, help = ( newHelp "" "conducting" ) }, Cmd.none )
 
         SetConducting (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg conducting) }, Cmd.none )
+            ( { model | help = ( newHelp helpMsg "conducting") }, Cmd.none )
 
         SetOrganist (Ok value) ->
-            ( { model | organist = value, help = ( newHelp "" organist ) }, Cmd.none )
+            ( { model | organist = value, help = ( newHelp "" "organist" ) }, Cmd.none )
 
         SetOrganist (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg organist ) }, Cmd.none )
+            ( { model | help = ( newHelp helpMsg "organist" ) }, Cmd.none )
 
         SetChorister (Ok value) ->
-            ( { model | chorister = value, help = ( newHelp "" chorister ) }, Cmd.none )
+            ( { model | chorister = value, help = ( newHelp "" "chorister" ) }, Cmd.none )
 
         SetChorister (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg chorister ) }, Cmd.none )
+            ( { model | help = ( newHelp helpMsg "chorister" ) }, Cmd.none )
 
         SetOpeningHymn (Ok value) ->
-            ( { model | openingHymn = value, help = ( newHelp "" openingHymn ) }, Cmd.none )
+            ( { model | openingHymn = value, help = ( newHelp "" "openingHymn" ) }, Cmd.none )
 
         SetOpeningHymn (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg openingHymn ) }, Cmd.none )
+            ( { model | help = ( newHelp helpMsg "openingHymn" ) }, Cmd.none )
 
         SetInvocation (Ok value) ->
-            ( { model | invocation = value, help = ( newHelp "" invocation ) }, Cmd.none )
+            ( { model | invocation = value, help = ( newHelp "" "invocation" ) }, Cmd.none )
 
         SetInvocation (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg invocation ) }, Cmd.none )
+            ( { model | help = ( newHelp helpMsg "invocation" ) }, Cmd.none )
 
         SetSacramentHymn (Ok value) ->
-            ( { model | sacramentHymn = value, help = ( newHelp "" sacramentHymn ) }, Cmd.none )
+            ( { model | sacramentHymn = value, help = ( newHelp "" "sacramentHymn" ) }, Cmd.none )
 
         SetSacramentHymn (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg sacramentHymn ) }, Cmd.none )
+            ( { model | help = ( newHelp helpMsg "sacramentHymn" ) }, Cmd.none )
 
         SetSpeakersAndSpcMusic ->
             ( model, Cmd.none )
 
         SetClosingHymn (Ok value) ->
-            ( { model | closingHymn = value, help = ( newHelp "" closingHymn ) }, Cmd.none )
+            ( { model | closingHymn = value, help = ( newHelp "" "closingHymn" ) }, Cmd.none )
 
         SetClosingHymn (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg closingHymn ) }, Cmd.none )
+            ( { model | help = ( newHelp helpMsg "closingHymn" ) }, Cmd.none )
 
         SetBenediction (Ok value) ->
-            ( { model | benediction = value, help = ( newHelp "" benediction ) }, Cmd.none )
+            ( { model | benediction = value, help = ( newHelp "" "benediction" ) }, Cmd.none )
 
         SetBenediction (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg benediction ) }, Cmd.none )
+            ( { model | help = ( newHelp helpMsg "benediction" ) }, Cmd.none )
 
         
 type Value 
