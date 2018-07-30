@@ -7,7 +7,7 @@ import Parser exposing (run, int)
 import Json.Decode as Json
 import Array exposing (initialize, fromList, toList)
 import Bootstrap.Form exposing (help)
-import Regex exposing (regex)
+import Regex exposing (regex, contains, find)
 import String.Case exposing (toCamelCaseLower)
 
 {-- preSpeakers is a list containing the input fields that will be rendered before the speaker fields. --}
@@ -219,25 +219,48 @@ validateField name value =
                 _ ->
                     SetBenediction (Ok value)
 
-        contains (regex "^(Speaker#\\d*)$") ->      {-- fix regEx --}
-            case value of
-                "" -> 
-                    SetSpeaker (Err "Please fill the all the speaker fields")
-
-                _ ->
-                    SetSpeaker ( Ok (value, name) )
-
-        contains (regex "^(Special\\sMusical\\sNumber#\\d*)$") ->           {-- fix regEx --}
-            case value of
-                "" ->
-                    SetSpecialMusicalNumber (Err "Please fill all the special musical number fields")
-
-                _ -> 
-                    SetSpecialMusicalNumber ( Ok (value, name) )
-
         _ -> 
-            Err
+            case matchHelper name of
+                Speaker ->
+                    if (value == "") then SetSpeaker (Err "Please enter a name")
+                    else if (findInt name == Nothing) then SetSpeaker (Err "There has been an error with the form. Please reload the page")
+                    else SetSpeaker ( Ok ( findInt name, value ) )
 
+                SpecialMusicalNumber ->
+                    if (value == "") then SetSpecialMusicalNumber (Err "Please enter a name")
+                    else if (findInt name == Nothing) then SetSpecialMusicalNumber (Err "There has been an error with the form. Please reload the page")
+                    else SetSpecialMusicalNumber ( Ok ( findInt name, value ) )
+
+                MatchError ->
+                    Error
+
+
+matchHelper string = 
+    if contains speakerRegEx string then Speaker 
+    else if contains spcMusicNumRegEx string then SpecialMusicalNumber
+    else MatchError
+
+
+findInt string = 
+    let 
+        maybeMatch = 
+            string  
+                |> find Regex.All (regex "\\d+")
+                |> List.head
+    in  
+        case maybeMatch of
+            Just record ->
+                record.match
+            
+            Nothing ->
+                Nothing
+
+
+speakerRegEx = regex "^(Speaker#\\d+)$"
+
+spcMusicNumRegEx = regex "^(Special\\sMusical\\sNumber#\\d+)$"
+
+{--dateRegEx = regex "(^(((0[1-9]|1[0-9]|2[0-8])[\/](0[1-9]|1[012]))|((29|30|31)[\/](0[13578]|1[02]))|((29|30)[\/](0[4,6,9]|11)))[\/](19|[2-9][0-9])\\d\\d$)|(^29[\/]02[\/](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$)" --}
 
 speakerList : Int -> List String 
 speakerList numSpeakers = 
@@ -387,7 +410,7 @@ update msg model =
         SetBenediction (Err helpMsg) ->
             ( { model | help = ( newHelp helpMsg "benediction" ) }, Cmd.none )
 
-        SetSpeaker (Ok (speaker, name)) ->
+        SetSpeaker (Ok (speakerNum, name)) ->
             ( model, Cmd.none )                                             {-- Name -> search for number -> subtract one -> index -> change record --}
 
         SetSpeaker (Err helpMsg) ->
@@ -399,8 +422,14 @@ update msg model =
         SetSpecialMusicalNumber (Err helpMsg) ->
             ( { model | help = ( newHelp helpMsg "spcMusicalNumbers" ) }, Cmd.none )
 
-        Err ->
+        Error ->
             ( model, Cmd.none )
+
+
+type MatchResult 
+    = Speaker
+    | SpecialMusicalNumber
+    | MatchError
 
         
 type Value 
@@ -424,7 +453,7 @@ type Msg
     | SetBenediction (Result String String)
     | SetSpeaker (Result (String, String) String)
     | SetSpecialMusicalNumber (Result (String, String) String)
-    | Err
+    | Error
 
 initialModel : Model
 initialModel = { numSpeakers = 0
