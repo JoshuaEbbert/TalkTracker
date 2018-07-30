@@ -5,10 +5,10 @@ import Html.Attributes exposing (id, class, classList, src, name, type_, title, 
 import Html.Events exposing (on, targetValue, onInput)
 import Parser exposing (run, int)
 import Json.Decode as Json
-import Array exposing (initialize, fromList, toList)
+import Array exposing (initialize, fromList, toList, set)
 import Bootstrap.Form exposing (help)
 import Regex exposing (regex, contains, find)
-import String.Case exposing (toCamelCaseLower)
+
 
 {-- preSpeakers is a list containing the input fields that will be rendered before the speaker fields. --}
 preSpeakers : List String
@@ -66,7 +66,7 @@ view model =
               , form [] ( model.numSpeakers
                             |> speakerList
                             |> (\list -> List.concat [ preSpeakers, list, ( specialMusicNumberList model.numSpcMusic ), postSpeakers ] )
-                            |> List.map viewInputField )
+                            |> List.map (viewInputField model) )
 
                         
               , button [ class "button black section" ] [ i [ class "fa fa-paper-plane" ] [ text "SUBMIT" ] ]
@@ -99,19 +99,65 @@ view model =
 
 
 {-- Functions used for input fields --}
-viewInputField : String -> Html Msg
-viewInputField name =
+viewInputField : Model -> String -> Html Msg
+viewInputField model name =
     div [] [ input [ class "input section border", placeholder name, required True, id (nameToId name), onInput (validateField name) ] [] 
-        , help [] [ helpText name ]
+        , help [] [ helpText model name ]
         ]
 
 
-helpText : String -> Html msg
-helpText name = 
-    let
-        newName = toCamelCaseLower name         {-- Adjust for numSpeakers, Speakers, etc. --}
-    in
-        text model.help.newName
+helpText : Model -> String -> Html msg
+helpText model name = 
+    case matchHelper name of
+        Speaker ->
+            model.help.speakers
+
+        SpecialMusicalNumber ->
+            model.help.spcMusicalNumbers
+
+        Other ->
+            case name of
+                "Number of Speakers" ->
+                    model.help.numSpeakers
+            
+                "Total Special Musical Numbers" ->
+                    model.help.numSpcMusic
+
+                "Ward" ->
+                    model.help.ward
+
+                "Date" ->
+                    model.help.date
+
+                "Time" ->
+                    model.help.time
+
+                "Conducting" ->
+                    model.help.conducting
+
+                "Organist" ->
+                    model.help.organist
+
+                "Chorister" ->
+                    model.help.chorister
+
+                "Opening Hymn" ->
+                    model.help.openingHymn
+
+                "Invocation" ->
+                    model.help.invocation
+
+                "Sacrament Hymn" ->
+                    model.help.sacramentHymn
+
+                "Closing Hymn" ->
+                    model.help.closingHymn
+
+                "Benediction" ->
+                    model.help.benediction
+
+                _ ->
+                    "No help message for this field"
 
 
 validateField name value = 
@@ -231,14 +277,14 @@ validateField name value =
                     else if (findInt name == Nothing) then SetSpecialMusicalNumber (Err "There has been an error with the form. Please reload the page")
                     else SetSpecialMusicalNumber ( Ok ( findInt name, value ) )
 
-                MatchError ->
-                    Error
+                Other ->
+                    MsgError
 
 
 matchHelper string = 
     if contains speakerRegEx string then Speaker 
     else if contains spcMusicNumRegEx string then SpecialMusicalNumber
-    else MatchError
+    else Other
 
 
 findInt string = 
@@ -321,7 +367,7 @@ toRecord numSpeakers int =
             int -> int = "", toRecord numSpeakers (int - 1)   
 --}
 
-newHelp value field =
+newHelp model value field =                         {-- This function is the issue. Field is not recognized? --}
     let
         oldHelpRecord = model.help
         newHelpRecord = { oldHelpRecord | field = value }
@@ -333,103 +379,103 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = 
     case msg of
         SetNumSpeakers (Ok numSpeakersInput) ->
-            ( { model | numSpeakers = numSpeakersInput, speakers = fixSpeakersRecord numSpeakersInput, help = ( newHelp "" "numSpeakers" ) }, Cmd.none )
+            ( { model | numSpeakers = numSpeakersInput, speakers = fixSpeakersRecord numSpeakersInput, help = ( newHelp model "" "numSpeakers" ) }, Cmd.none )
         
         SetNumSpeakers (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "numSpeakers" ) }, Cmd.none)
+            ( { model | help = ( newHelp model helpMsg "numSpeakers" ) }, Cmd.none)
 
         SetNumMusic (Ok numSpcMusicInput) ->
-            ( { model | numSpcMusic = numSpcMusicInput, spcMusicalNumbers = fixSpcMusicalNumbersRecord numSpcMusicInput, help = ( newHelp "" "numSpcMusic" ) }, Cmd.none )
+            ( { model | numSpcMusic = numSpcMusicInput, spcMusicalNumbers = fixSpcMusicalNumbersRecord numSpcMusicInput, help = ( newHelp model "" "numSpcMusic" ) }, Cmd.none )
         
         SetNumMusic (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "numSpcMusic" ) }, Cmd.none)
+            ( { model | help = ( newHelp model helpMsg "numSpcMusic" ) }, Cmd.none)
 
         SetWard (Ok value) ->
-            ( { model | ward = value, help = ( newHelp "" "ward" ) }, Cmd.none )
+            ( { model | ward = value, help = ( newHelp model "" "ward" ) }, Cmd.none )
 
         SetWard (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "ward" ) }, Cmd.none )
+            ( { model | help = ( newHelp model helpMsg "ward" ) }, Cmd.none )
 
         SetDate (Ok value) ->
-            ( { model | date = value, help = ( newHelp "" "date" ) }, Cmd.none )
+            ( { model | date = value, help = ( newHelp model "" "date" ) }, Cmd.none )
 
         SetDate (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "date" ) }, Cmd.none )
+            ( { model | help = ( newHelp model helpMsg "date" ) }, Cmd.none )
 
         SetTime (Ok value) ->
-            ( { model | time = value, help = ( newHelp "" "time" ) }, Cmd.none )
+            ( { model | time = value, help = ( newHelp model "" "time" ) }, Cmd.none )
 
         SetTime (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "time" ) }, Cmd.none )
+            ( { model | help = ( newHelp model helpMsg "time" ) }, Cmd.none )
 
         SetConducting (Ok value) ->
-            ( { model | conducting = value, help = ( newHelp "" "conducting" ) }, Cmd.none )
+            ( { model | conducting = value, help = ( newHelp model "" "conducting" ) }, Cmd.none )
 
         SetConducting (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "conducting") }, Cmd.none )
+            ( { model | help = ( newHelp model helpMsg "conducting") }, Cmd.none )
 
         SetOrganist (Ok value) ->
-            ( { model | organist = value, help = ( newHelp "" "organist" ) }, Cmd.none )
+            ( { model | organist = value, help = ( newHelp model "" "organist" ) }, Cmd.none )
 
         SetOrganist (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "organist" ) }, Cmd.none )
+            ( { model | help = ( newHelp model helpMsg "organist" ) }, Cmd.none )
 
         SetChorister (Ok value) ->
-            ( { model | chorister = value, help = ( newHelp "" "chorister" ) }, Cmd.none )
+            ( { model | chorister = value, help = ( newHelp model "" "chorister" ) }, Cmd.none )
 
         SetChorister (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "chorister" ) }, Cmd.none )
+            ( { model | help = ( newHelp model helpMsg "chorister" ) }, Cmd.none )
 
         SetOpeningHymn (Ok value) ->
-            ( { model | openingHymn = value, help = ( newHelp "" "openingHymn" ) }, Cmd.none )
+            ( { model | openingHymn = value, help = ( newHelp model "" "openingHymn" ) }, Cmd.none )
 
         SetOpeningHymn (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "openingHymn" ) }, Cmd.none )
+            ( { model | help = ( newHelp model helpMsg "openingHymn" ) }, Cmd.none )
 
         SetInvocation (Ok value) ->
-            ( { model | invocation = value, help = ( newHelp "" "invocation" ) }, Cmd.none )
+            ( { model | invocation = value, help = ( newHelp model "" "invocation" ) }, Cmd.none )
 
         SetInvocation (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "invocation" ) }, Cmd.none )
+            ( { model | help = ( newHelp model helpMsg "invocation" ) }, Cmd.none )
 
         SetSacramentHymn (Ok value) ->
-            ( { model | sacramentHymn = value, help = ( newHelp "" "sacramentHymn" ) }, Cmd.none )
+            ( { model | sacramentHymn = value, help = ( newHelp model "" "sacramentHymn" ) }, Cmd.none )
 
         SetSacramentHymn (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "sacramentHymn" ) }, Cmd.none )
+            ( { model | help = ( newHelp model helpMsg "sacramentHymn" ) }, Cmd.none )
 
         SetClosingHymn (Ok value) ->
-            ( { model | closingHymn = value, help = ( newHelp "" "closingHymn" ) }, Cmd.none )
+            ( { model | closingHymn = value, help = ( newHelp model "" "closingHymn" ) }, Cmd.none )
 
         SetClosingHymn (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "closingHymn" ) }, Cmd.none )
+            ( { model | help = ( newHelp model helpMsg "closingHymn" ) }, Cmd.none )
 
         SetBenediction (Ok value) ->
-            ( { model | benediction = value, help = ( newHelp "" "benediction" ) }, Cmd.none )
+            ( { model | benediction = value, help = ( newHelp model "" "benediction" ) }, Cmd.none )
 
         SetBenediction (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "benediction" ) }, Cmd.none )
+            ( { model | help = ( newHelp model helpMsg "benediction" ) }, Cmd.none )
 
         SetSpeaker (Ok (speakerNum, name)) ->
-            ( model, Cmd.none )                                             {-- Name -> search for number -> subtract one -> index -> change record --}
+            ( { model | speakers = set (speakerNum - 1) name model.speakers, help = ( newHelp model "" "speakers" ) }, Cmd.none )
 
         SetSpeaker (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "speakers" ) }, Cmd.none ) {-- Maybe redo speakers field of help... --}
+            ( { model | help = ( newHelp model helpMsg "speakers" ) }, Cmd.none ) {-- Maybe redo speakers field of help...? --}
 
         SetSpecialMusicalNumber (Ok (spcMusicalNum, name)) ->
-            ( model, Cmd.none )
+            ( { model | spcMusicalNumbers = set (spcMusicalNum - 1) name model.spcMusicalNumbers, help = ( newHelp model "" "spcMusicalNumbers" ) }, Cmd.none )
 
         SetSpecialMusicalNumber (Err helpMsg) ->
-            ( { model | help = ( newHelp helpMsg "spcMusicalNumbers" ) }, Cmd.none )
+            ( { model | help = ( newHelp model helpMsg "spcMusicalNumbers" ) }, Cmd.none )
 
-        Error ->
+        MsgError ->
             ( model, Cmd.none )
 
 
 type MatchResult 
     = Speaker
     | SpecialMusicalNumber
-    | MatchError
+    | Other
 
         
 type Value 
@@ -453,7 +499,7 @@ type Msg
     | SetBenediction (Result String String)
     | SetSpeaker (Result (String, String) String)
     | SetSpecialMusicalNumber (Result (String, String) String)
-    | Error
+    | MsgError
 
 initialModel : Model
 initialModel = { numSpeakers = 0
