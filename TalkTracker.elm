@@ -270,7 +270,7 @@ validateField name value =
             case matchHelper name of
                 Speaker ->
                     if (value == "") then 
-                        SetSpeaker (Err "Please enter a name")
+                        SetSpeaker (Err "Please fill each of the speaker fields")
                     else if (findInt name == "findInt error") then 
                         SetSpeaker (Err "There has been an error with the form. Please reload the page")
                     else 
@@ -283,7 +283,7 @@ validateField name value =
 
                 SpecialMusicalNumber ->
                     if (value == "") then 
-                        SetSpecialMusicalNumber (Err "Please enter a special musical number")
+                        SetSpecialMusicalNumber (Err "Please fill each of the special musical number fields")
                     else if (findInt name == "findInt error") then 
                         SetSpecialMusicalNumber (Err "There has been an error with the form. Please reload the page")
                     else 
@@ -438,9 +438,9 @@ setHelpSpeakers help value =
     { help | speakers = value }
 
 
-setHelpSpcMusicalNumbers : { b | speakers : a } -> c -> { b | speakers : c }
+setHelpSpcMusicalNumbers : { b | spcMusicalNumbers : a } -> c -> { b | spcMusicalNumbers : c }
 setHelpSpcMusicalNumbers help value = 
-    { help | speakers = value }
+    { help | spcMusicalNumbers = value }
 
 
 -- End set help functions --
