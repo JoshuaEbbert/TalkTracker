@@ -422,7 +422,7 @@ setHelpSpeakers help value =
 setHelpSpcMusicalNumbers help value = 
     { help | speakers = value }
 
--- End set help functions
+-- End set help functions --
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
