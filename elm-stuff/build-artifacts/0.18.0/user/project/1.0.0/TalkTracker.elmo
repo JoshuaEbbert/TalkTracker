@@ -1,75 +1,105 @@
-var _user$project$TalkTracker$toRecord = function ($int) {
-	return {$int: ''};
-};
+var _user$project$TalkTracker$setHelpSpcMusicalNumbers = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{speakers: value});
+	});
+var _user$project$TalkTracker$setHelpSpeakers = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{speakers: value});
+	});
+var _user$project$TalkTracker$setHelpBenediction = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{benediction: value});
+	});
+var _user$project$TalkTracker$setHelpClosingHymn = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{closingHymn: value});
+	});
+var _user$project$TalkTracker$setHelpSacramentHymn = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{sacramentHymn: value});
+	});
+var _user$project$TalkTracker$setHelpInvocation = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{invocation: value});
+	});
+var _user$project$TalkTracker$setHelpOpeningHymn = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{openingHymn: value});
+	});
+var _user$project$TalkTracker$setHelpChorister = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{chorister: value});
+	});
+var _user$project$TalkTracker$setHelpOrganist = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{organist: value});
+	});
+var _user$project$TalkTracker$setHelpConducting = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{conducting: value});
+	});
+var _user$project$TalkTracker$setHelpTime = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{time: value});
+	});
+var _user$project$TalkTracker$setHelpDate = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{date: value});
+	});
+var _user$project$TalkTracker$setHelpWard = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{ward: value});
+	});
+var _user$project$TalkTracker$setHelpNumSpcMusic = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{numSpcMusic: value});
+	});
+var _user$project$TalkTracker$setHelpNumSpeakers = F2(
+	function (help, value) {
+		return _elm_lang$core$Native_Utils.update(
+			help,
+			{numSpeakers: value});
+	});
 var _user$project$TalkTracker$fixSpcMusicalNumbersRecord = function (numSpcMusic) {
-	return _elm_lang$core$Array$fromList(
-		A2(
-			_elm_lang$core$List$map,
-			function ($int) {
-				return {$int: ''};
-			},
-			_elm_lang$core$Array$toList(
-				A2(
-					_elm_lang$core$Array$initialize,
-					numSpcMusic,
-					F2(
-						function (x, y) {
-							return x + y;
-						})(1)))));
+	return A2(
+		_elm_lang$core$Array$repeat,
+		numSpcMusic,
+		{specialMusicalNumber: ''});
 };
 var _user$project$TalkTracker$fixSpeakersRecord = function (numSpeakers) {
-	return _elm_lang$core$Array$fromList(
-		A2(
-			_elm_lang$core$List$map,
-			function ($int) {
-				return {$int: ''};
-			},
-			_elm_lang$core$Array$toList(
-				A2(
-					_elm_lang$core$Array$initialize,
-					numSpeakers,
-					F2(
-						function (x, y) {
-							return x + y;
-						})(1)))));
+	return A2(
+		_elm_lang$core$Array$repeat,
+		numSpeakers,
+		{speaker: ''});
 };
-var _user$project$TalkTracker$update = F2(
-	function (msg, model) {
-		var _p0 = msg;
-		if (_p0.ctor === 'SetNumSpeakers') {
-			if (_p0._0.ctor === 'Ok') {
-				var _p1 = _p0._0._0;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							numSpeakers: _p1,
-							speakers: _user$project$TalkTracker$fixSpeakersRecord(_p1)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			} else {
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-			}
-		} else {
-			if (_p0._0.ctor === 'Ok') {
-				var _p2 = _p0._0._0;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							numSpcMusic: _p2,
-							spcMusicalNumbers: _user$project$TalkTracker$fixSpcMusicalNumbersRecord(_p2)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			} else {
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-			}
-		}
-	});
 var _user$project$TalkTracker$initialModel = {
 	numSpeakers: 0,
 	numSpcMusic: 0,
@@ -85,7 +115,8 @@ var _user$project$TalkTracker$initialModel = {
 	speakers: _user$project$TalkTracker$fixSpeakersRecord(0),
 	spcMusicalNumbers: _user$project$TalkTracker$fixSpcMusicalNumbersRecord(0),
 	closingHymn: 'No Input Yet',
-	benediction: 'No Input Yet'
+	benediction: 'No Input Yet',
+	help: {numSpeakers: '', numSpcMusic: '', ward: '', date: '', time: '', conducting: '', organist: '', chorister: '', openingHymn: '', invocation: '', sacramentHymn: '', speakers: '', spcMusicalNumbers: '', closingHymn: '', benediction: ''}
 };
 var _user$project$TalkTracker$parseInt = F2(
 	function (msg, string) {
@@ -112,7 +143,7 @@ var _user$project$TalkTracker$specialMusicNumberList = function (numSpcMusic) {
 			function ($int) {
 				return A2(
 					_elm_lang$core$Basics_ops['++'],
-					'Special Music Number#',
+					'Special Musical Number#',
 					_elm_lang$core$Basics$toString($int + 1));
 			}));
 };
@@ -128,35 +159,21 @@ var _user$project$TalkTracker$speakerList = function (numSpeakers) {
 					_elm_lang$core$Basics$toString($int + 1));
 			}));
 };
-var _user$project$TalkTracker$viewInputField = function (name) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$input,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('input section border'),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$placeholder(name),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$required(true),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$id(
-									_user$project$TalkTracker$nameToId(name)),
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				},
-				{ctor: '[]'}),
-			_1: {ctor: '[]'}
-		});
+var _user$project$TalkTracker$spcMusicNumRegEx = _elm_lang$core$Regex$regex('^(Special\\sMusical\\sNumber#\\d+)$');
+var _user$project$TalkTracker$speakerRegEx = _elm_lang$core$Regex$regex('^(Speaker#\\d+)$');
+var _user$project$TalkTracker$findInt = function (string) {
+	var maybeMatch = _elm_lang$core$List$head(
+		A3(
+			_elm_lang$core$Regex$find,
+			_elm_lang$core$Regex$All,
+			_elm_lang$core$Regex$regex('\\d+'),
+			string));
+	var _p0 = maybeMatch;
+	if (_p0.ctor === 'Just') {
+		return _p0._0.match;
+	} else {
+		return 'findInt error';
+	}
 };
 var _user$project$TalkTracker$onBlurWithTargetValue = function (tagger) {
 	return A2(
@@ -175,32 +192,40 @@ var _user$project$TalkTracker$postSpeakers = {
 };
 var _user$project$TalkTracker$preSpeakers = {
 	ctor: '::',
-	_0: 'Ward',
+	_0: 'Number of Speakers',
 	_1: {
 		ctor: '::',
-		_0: 'Date',
+		_0: 'Total Special Musical Numbers',
 		_1: {
 			ctor: '::',
-			_0: 'Time',
+			_0: 'Ward',
 			_1: {
 				ctor: '::',
-				_0: 'Conducting',
+				_0: 'Date',
 				_1: {
 					ctor: '::',
-					_0: 'Organist',
+					_0: 'Time',
 					_1: {
 						ctor: '::',
-						_0: 'Chorister',
+						_0: 'Conducting',
 						_1: {
 							ctor: '::',
-							_0: 'Opening Hymn',
+							_0: 'Organist',
 							_1: {
 								ctor: '::',
-								_0: 'Invocation',
+								_0: 'Chorister',
 								_1: {
 									ctor: '::',
-									_0: 'Sacrament Hymn',
-									_1: {ctor: '[]'}
+									_0: 'Opening Hymn',
+									_1: {
+										ctor: '::',
+										_0: 'Invocation',
+										_1: {
+											ctor: '::',
+											_0: 'Sacrament Hymn',
+											_1: {ctor: '[]'}
+										}
+									}
 								}
 							}
 						}
@@ -210,6 +235,377 @@ var _user$project$TalkTracker$preSpeakers = {
 		}
 	}
 };
+var _user$project$TalkTracker$SpeakerPair = function (a) {
+	return {speaker: a};
+};
+var _user$project$TalkTracker$SpcMusicPair = function (a) {
+	return {specialMusicalNumber: a};
+};
+var _user$project$TalkTracker$update = F2(
+	function (msg, model) {
+		var _p1 = msg;
+		switch (_p1.ctor) {
+			case 'SetNumSpeakers':
+				if (_p1._0.ctor === 'Ok') {
+					var _p2 = _p1._0._0;
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								numSpeakers: _p2,
+								speakers: _user$project$TalkTracker$fixSpeakersRecord(_p2),
+								help: A2(_user$project$TalkTracker$setHelpNumSpeakers, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpNumSpeakers, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetNumMusic':
+				if (_p1._0.ctor === 'Ok') {
+					var _p3 = _p1._0._0;
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								numSpcMusic: _p3,
+								spcMusicalNumbers: _user$project$TalkTracker$fixSpcMusicalNumbersRecord(_p3),
+								help: A2(_user$project$TalkTracker$setHelpNumSpcMusic, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpNumSpcMusic, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetWard':
+				if (_p1._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								ward: _p1._0._0,
+								help: A2(_user$project$TalkTracker$setHelpWard, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpWard, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetDate':
+				if (_p1._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								date: _p1._0._0,
+								help: A2(_user$project$TalkTracker$setHelpDate, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpDate, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetTime':
+				if (_p1._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								time: _p1._0._0,
+								help: A2(_user$project$TalkTracker$setHelpTime, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpTime, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetConducting':
+				if (_p1._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								conducting: _p1._0._0,
+								help: A2(_user$project$TalkTracker$setHelpConducting, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpConducting, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetOrganist':
+				if (_p1._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								organist: _p1._0._0,
+								help: A2(_user$project$TalkTracker$setHelpOrganist, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpOrganist, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetChorister':
+				if (_p1._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								chorister: _p1._0._0,
+								help: A2(_user$project$TalkTracker$setHelpChorister, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpChorister, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetOpeningHymn':
+				if (_p1._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								openingHymn: _p1._0._0,
+								help: A2(_user$project$TalkTracker$setHelpOpeningHymn, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpOpeningHymn, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetInvocation':
+				if (_p1._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								invocation: _p1._0._0,
+								help: A2(_user$project$TalkTracker$setHelpInvocation, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpInvocation, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetSacramentHymn':
+				if (_p1._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								sacramentHymn: _p1._0._0,
+								help: A2(_user$project$TalkTracker$setHelpSacramentHymn, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpSacramentHymn, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetClosingHymn':
+				if (_p1._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								closingHymn: _p1._0._0,
+								help: A2(_user$project$TalkTracker$setHelpClosingHymn, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpClosingHymn, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetBenediction':
+				if (_p1._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								benediction: _p1._0._0,
+								help: A2(_user$project$TalkTracker$setHelpBenediction, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpBenediction, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetSpeaker':
+				if (_p1._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								speakers: A3(
+									_elm_lang$core$Array$set,
+									_p1._0._0._0 - 1,
+									_user$project$TalkTracker$SpeakerPair(_p1._0._0._1),
+									model.speakers),
+								help: A2(_user$project$TalkTracker$setHelpSpeakers, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpSpeakers, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetSpecialMusicalNumber':
+				if (_p1._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								spcMusicalNumbers: A3(
+									_elm_lang$core$Array$set,
+									_p1._0._0._0 - 1,
+									_user$project$TalkTracker$SpcMusicPair(_p1._0._0._1),
+									model.spcMusicalNumbers),
+								help: A2(_user$project$TalkTracker$setHelpSpcMusicalNumbers, model.help, '')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								help: A2(_user$project$TalkTracker$setHelpSpcMusicalNumbers, model.help, _p1._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			default:
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});
 var _user$project$TalkTracker$Model = function (a) {
 	return function (b) {
 		return function (c) {
@@ -225,7 +621,9 @@ var _user$project$TalkTracker$Model = function (a) {
 												return function (m) {
 													return function (n) {
 														return function (o) {
-															return {numSpeakers: a, numSpcMusic: b, ward: c, date: d, time: e, conducting: f, organist: g, chorister: h, openingHymn: i, invocation: j, sacramentHymn: k, speakers: l, spcMusicalNumbers: m, closingHymn: n, benediction: o};
+															return function (p) {
+																return {numSpeakers: a, numSpcMusic: b, ward: c, date: d, time: e, conducting: f, organist: g, chorister: h, openingHymn: i, invocation: j, sacramentHymn: k, speakers: l, spcMusicalNumbers: m, closingHymn: n, benediction: o, help: p};
+															};
 														};
 													};
 												};
@@ -241,12 +639,334 @@ var _user$project$TalkTracker$Model = function (a) {
 		};
 	};
 };
+var _user$project$TalkTracker$Other = {ctor: 'Other'};
+var _user$project$TalkTracker$SpecialMusicalNumber = {ctor: 'SpecialMusicalNumber'};
+var _user$project$TalkTracker$Speaker = {ctor: 'Speaker'};
+var _user$project$TalkTracker$matchHelper = function (string) {
+	return A2(_elm_lang$core$Regex$contains, _user$project$TalkTracker$speakerRegEx, string) ? _user$project$TalkTracker$Speaker : (A2(_elm_lang$core$Regex$contains, _user$project$TalkTracker$spcMusicNumRegEx, string) ? _user$project$TalkTracker$SpecialMusicalNumber : _user$project$TalkTracker$Other);
+};
+var _user$project$TalkTracker$helpText = F2(
+	function (model, name) {
+		var _p4 = _user$project$TalkTracker$matchHelper(name);
+		switch (_p4.ctor) {
+			case 'Speaker':
+				return model.help.speakers;
+			case 'SpecialMusicalNumber':
+				return model.help.spcMusicalNumbers;
+			default:
+				var _p5 = name;
+				switch (_p5) {
+					case 'Number of Speakers':
+						return model.help.numSpeakers;
+					case 'Total Special Musical Numbers':
+						return model.help.numSpcMusic;
+					case 'Ward':
+						return model.help.ward;
+					case 'Date':
+						return model.help.date;
+					case 'Time':
+						return model.help.time;
+					case 'Conducting':
+						return model.help.conducting;
+					case 'Organist':
+						return model.help.organist;
+					case 'Chorister':
+						return model.help.chorister;
+					case 'Opening Hymn':
+						return model.help.openingHymn;
+					case 'Invocation':
+						return model.help.invocation;
+					case 'Sacrament Hymn':
+						return model.help.sacramentHymn;
+					case 'Closing Hymn':
+						return model.help.closingHymn;
+					case 'Benediction':
+						return model.help.benediction;
+					default:
+						return 'No help message for this field';
+				}
+		}
+	});
+var _user$project$TalkTracker$String = {ctor: 'String'};
+var _user$project$TalkTracker$Int = {ctor: 'Int'};
+var _user$project$TalkTracker$MsgError = {ctor: 'MsgError'};
+var _user$project$TalkTracker$SetSpecialMusicalNumber = function (a) {
+	return {ctor: 'SetSpecialMusicalNumber', _0: a};
+};
+var _user$project$TalkTracker$SetSpeaker = function (a) {
+	return {ctor: 'SetSpeaker', _0: a};
+};
+var _user$project$TalkTracker$SetBenediction = function (a) {
+	return {ctor: 'SetBenediction', _0: a};
+};
+var _user$project$TalkTracker$SetClosingHymn = function (a) {
+	return {ctor: 'SetClosingHymn', _0: a};
+};
+var _user$project$TalkTracker$SetSacramentHymn = function (a) {
+	return {ctor: 'SetSacramentHymn', _0: a};
+};
+var _user$project$TalkTracker$SetInvocation = function (a) {
+	return {ctor: 'SetInvocation', _0: a};
+};
+var _user$project$TalkTracker$SetOpeningHymn = function (a) {
+	return {ctor: 'SetOpeningHymn', _0: a};
+};
+var _user$project$TalkTracker$SetChorister = function (a) {
+	return {ctor: 'SetChorister', _0: a};
+};
+var _user$project$TalkTracker$SetOrganist = function (a) {
+	return {ctor: 'SetOrganist', _0: a};
+};
+var _user$project$TalkTracker$SetConducting = function (a) {
+	return {ctor: 'SetConducting', _0: a};
+};
+var _user$project$TalkTracker$SetTime = function (a) {
+	return {ctor: 'SetTime', _0: a};
+};
+var _user$project$TalkTracker$SetDate = function (a) {
+	return {ctor: 'SetDate', _0: a};
+};
+var _user$project$TalkTracker$SetWard = function (a) {
+	return {ctor: 'SetWard', _0: a};
+};
 var _user$project$TalkTracker$SetNumMusic = function (a) {
 	return {ctor: 'SetNumMusic', _0: a};
 };
 var _user$project$TalkTracker$SetNumSpeakers = function (a) {
 	return {ctor: 'SetNumSpeakers', _0: a};
 };
+var _user$project$TalkTracker$validateField = F2(
+	function (name, value) {
+		var _p6 = name;
+		switch (_p6) {
+			case 'Number of Speakers':
+				var _p7 = A2(_elm_tools$parser$Parser$run, _elm_tools$parser$Parser$int, value);
+				if (_p7.ctor === 'Ok') {
+					return _user$project$TalkTracker$SetNumSpeakers(
+						_elm_lang$core$Result$Ok(_p7._0));
+				} else {
+					return _user$project$TalkTracker$SetNumSpeakers(
+						_elm_lang$core$Result$Err('Please enter a whole number (e.g. 4)'));
+				}
+			case 'Total Special Musical Numbers':
+				var _p8 = A2(_elm_tools$parser$Parser$run, _elm_tools$parser$Parser$int, value);
+				if (_p8.ctor === 'Ok') {
+					return _user$project$TalkTracker$SetNumMusic(
+						_elm_lang$core$Result$Ok(_p8._0));
+				} else {
+					return _user$project$TalkTracker$SetNumMusic(
+						_elm_lang$core$Result$Err('Please enter a whole number (e.g. 4)'));
+				}
+			case 'Ward':
+				var _p9 = value;
+				if (_p9 === '') {
+					return _user$project$TalkTracker$SetWard(
+						_elm_lang$core$Result$Err('Please enter a ward'));
+				} else {
+					return _user$project$TalkTracker$SetWard(
+						_elm_lang$core$Result$Ok(value));
+				}
+			case 'Date':
+				var _p10 = value;
+				if (_p10 === '12/12/18') {
+					return _user$project$TalkTracker$SetDate(
+						_elm_lang$core$Result$Ok(value));
+				} else {
+					return _user$project$TalkTracker$SetDate(
+						_elm_lang$core$Result$Err('Please enter a valid date (e.g. 04/09/18)'));
+				}
+			case 'Time':
+				var _p11 = value;
+				if (_p11 === '12:00') {
+					return _user$project$TalkTracker$SetTime(
+						_elm_lang$core$Result$Ok(value));
+				} else {
+					return _user$project$TalkTracker$SetTime(
+						_elm_lang$core$Result$Err('Please enter a valid time (e.g. 12:00 a.m.)'));
+				}
+			case 'Conducting':
+				var _p12 = value;
+				if (_p12 === '') {
+					return _user$project$TalkTracker$SetConducting(
+						_elm_lang$core$Result$Err('Please enter the name of the person who will be conducting'));
+				} else {
+					return _user$project$TalkTracker$SetConducting(
+						_elm_lang$core$Result$Ok(value));
+				}
+			case 'Organist':
+				var _p13 = value;
+				if (_p13 === '') {
+					return _user$project$TalkTracker$SetOrganist(
+						_elm_lang$core$Result$Err('Please enter an organist'));
+				} else {
+					return _user$project$TalkTracker$SetOrganist(
+						_elm_lang$core$Result$Ok(value));
+				}
+			case 'Chorister':
+				var _p14 = value;
+				if (_p14 === '') {
+					return _user$project$TalkTracker$SetChorister(
+						_elm_lang$core$Result$Err('Please enter a chorister'));
+				} else {
+					return _user$project$TalkTracker$SetChorister(
+						_elm_lang$core$Result$Ok(value));
+				}
+			case 'Opening Hymn':
+				var _p15 = value;
+				if (_p15 === '') {
+					return _user$project$TalkTracker$SetOpeningHymn(
+						_elm_lang$core$Result$Err('Please enter an opening hymn'));
+				} else {
+					return _user$project$TalkTracker$SetOpeningHymn(
+						_elm_lang$core$Result$Ok(value));
+				}
+			case 'Invocation':
+				var _p16 = value;
+				if (_p16 === '') {
+					return _user$project$TalkTracker$SetInvocation(
+						_elm_lang$core$Result$Err('Please enter a name for the invocation'));
+				} else {
+					return _user$project$TalkTracker$SetInvocation(
+						_elm_lang$core$Result$Ok(value));
+				}
+			case 'Sacrament Hymn':
+				var _p17 = value;
+				if (_p17 === '') {
+					return _user$project$TalkTracker$SetSacramentHymn(
+						_elm_lang$core$Result$Err('Please enter a sacrament hymn'));
+				} else {
+					return _user$project$TalkTracker$SetSacramentHymn(
+						_elm_lang$core$Result$Ok(value));
+				}
+			case 'Closing Hymn':
+				var _p18 = value;
+				if (_p18 === '') {
+					return _user$project$TalkTracker$SetClosingHymn(
+						_elm_lang$core$Result$Err('Please enter a closing hymn'));
+				} else {
+					return _user$project$TalkTracker$SetClosingHymn(
+						_elm_lang$core$Result$Ok(value));
+				}
+			case 'Benediction':
+				var _p19 = value;
+				if (_p19 === '') {
+					return _user$project$TalkTracker$SetBenediction(
+						_elm_lang$core$Result$Err('Please enter a name for the benediction'));
+				} else {
+					return _user$project$TalkTracker$SetBenediction(
+						_elm_lang$core$Result$Ok(value));
+				}
+			default:
+				var _p20 = _user$project$TalkTracker$matchHelper(name);
+				switch (_p20.ctor) {
+					case 'Speaker':
+						if (_elm_lang$core$Native_Utils.eq(value, '')) {
+							return _user$project$TalkTracker$SetSpeaker(
+								_elm_lang$core$Result$Err('Please enter a name'));
+						} else {
+							if (_elm_lang$core$Native_Utils.eq(
+								_user$project$TalkTracker$findInt(name),
+								'findInt error')) {
+								return _user$project$TalkTracker$SetSpeaker(
+									_elm_lang$core$Result$Err('There has been an error with the form. Please reload the page'));
+							} else {
+								var _p21 = A2(
+									_elm_tools$parser$Parser$run,
+									_elm_tools$parser$Parser$int,
+									_user$project$TalkTracker$findInt(name));
+								if (_p21.ctor === 'Ok') {
+									return _user$project$TalkTracker$SetSpeaker(
+										_elm_lang$core$Result$Ok(
+											{ctor: '_Tuple2', _0: _p21._0, _1: value}));
+								} else {
+									return _user$project$TalkTracker$SetSpeaker(
+										_elm_lang$core$Result$Err('There has been an error with the input. Please reload the page'));
+								}
+							}
+						}
+					case 'SpecialMusicalNumber':
+						if (_elm_lang$core$Native_Utils.eq(value, '')) {
+							return _user$project$TalkTracker$SetSpecialMusicalNumber(
+								_elm_lang$core$Result$Err('Please enter a special musical number'));
+						} else {
+							if (_elm_lang$core$Native_Utils.eq(
+								_user$project$TalkTracker$findInt(name),
+								'findInt error')) {
+								return _user$project$TalkTracker$SetSpecialMusicalNumber(
+									_elm_lang$core$Result$Err('There has been an error with the form. Please reload the page'));
+							} else {
+								var _p22 = A2(
+									_elm_tools$parser$Parser$run,
+									_elm_tools$parser$Parser$int,
+									_user$project$TalkTracker$findInt(name));
+								if (_p22.ctor === 'Ok') {
+									return _user$project$TalkTracker$SetSpecialMusicalNumber(
+										_elm_lang$core$Result$Ok(
+											{ctor: '_Tuple2', _0: _p22._0, _1: value}));
+								} else {
+									return _user$project$TalkTracker$SetSpecialMusicalNumber(
+										_elm_lang$core$Result$Err('There has been an error with the input. Please reload the page'));
+								}
+							}
+						}
+					default:
+						return _user$project$TalkTracker$MsgError;
+				}
+		}
+	});
+var _user$project$TalkTracker$viewInputField = F2(
+	function (model, name) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$input,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('input section border'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$placeholder(name),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$required(true),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$id(
+										_user$project$TalkTracker$nameToId(name)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onInput(
+											_user$project$TalkTracker$validateField(name)),
+										_1: {
+											ctor: '::',
+											_0: _user$project$TalkTracker$onBlurWithTargetValue(
+												_user$project$TalkTracker$validateField(name)),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_rundis$elm_bootstrap$Bootstrap_Form$help,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								A2(_user$project$TalkTracker$helpText, model, name)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
 var _user$project$TalkTracker$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -544,206 +1264,196 @@ var _user$project$TalkTracker$view = function (model) {
 								_1: {
 									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$input,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('input section border'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$id('numSpeakerInput'),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$placeholder('Number of Speakers (e.g. 4)'),
-													_1: {
+										_elm_lang$html$Html$form,
+										{ctor: '[]'},
+										A2(
+											_elm_lang$core$List$map,
+											_user$project$TalkTracker$viewInputField(model),
+											function (list) {
+												return _elm_lang$core$List$concat(
+													{
 														ctor: '::',
-														_0: _user$project$TalkTracker$onBlurWithTargetValue(
-															_user$project$TalkTracker$parseInt(_user$project$TalkTracker$SetNumSpeakers)),
-														_1: {ctor: '[]'}
-													}
-												}
-											}
-										},
-										{ctor: '[]'}),
+														_0: _user$project$TalkTracker$preSpeakers,
+														_1: {
+															ctor: '::',
+															_0: list,
+															_1: {
+																ctor: '::',
+																_0: _user$project$TalkTracker$specialMusicNumberList(model.numSpcMusic),
+																_1: {
+																	ctor: '::',
+																	_0: _user$project$TalkTracker$postSpeakers,
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													});
+											}(
+												_user$project$TalkTracker$speakerList(model.numSpeakers)))),
 									_1: {
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$input,
+											_elm_lang$html$Html$button,
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('input section border'),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$id('numSpcMusicInput'),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$placeholder('Total Special Musical Numbers (e.g. 1)'),
-														_1: {
-															ctor: '::',
-															_0: _user$project$TalkTracker$onBlurWithTargetValue(
-																_user$project$TalkTracker$parseInt(_user$project$TalkTracker$SetNumMusic)),
-															_1: {ctor: '[]'}
-														}
-													}
-												}
+												_0: _elm_lang$html$Html_Attributes$class('button black section'),
+												_1: {ctor: '[]'}
 											},
-											{ctor: '[]'}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$form,
-												{ctor: '[]'},
-												A2(
-													_elm_lang$core$List$map,
-													_user$project$TalkTracker$viewInputField,
-													function (list) {
-														return _elm_lang$core$List$concat(
-															{
-																ctor: '::',
-																_0: _user$project$TalkTracker$preSpeakers,
-																_1: {
-																	ctor: '::',
-																	_0: list,
-																	_1: {
-																		ctor: '::',
-																		_0: _user$project$TalkTracker$specialMusicNumberList(model.numSpcMusic),
-																		_1: {
-																			ctor: '::',
-																			_0: _user$project$TalkTracker$postSpeakers,
-																			_1: {ctor: '[]'}
-																		}
-																	}
-																}
-															});
-													}(
-														_user$project$TalkTracker$speakerList(model.numSpeakers)))),
-											_1: {
+											{
 												ctor: '::',
 												_0: A2(
-													_elm_lang$html$Html$button,
+													_elm_lang$html$Html$i,
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('button black section'),
+														_0: _elm_lang$html$Html_Attributes$class('fa fa-paper-plane'),
 														_1: {ctor: '[]'}
 													},
 													{
 														ctor: '::',
+														_0: _elm_lang$html$Html$text('SUBMIT'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$div,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('container padding-32'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$id('about'),
+														_1: {ctor: '[]'}
+													}
+												},
+												{
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$h3,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$class('border-bottom border-light-grey padding-16'),
+															_1: {ctor: '[]'}
+														},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('About'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
 														_0: A2(
-															_elm_lang$html$Html$i,
+															_elm_lang$html$Html$p,
+															{ctor: '[]'},
 															{
 																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$class('fa fa-paper-plane'),
+																_0: _elm_lang$html$Html$text('Fill me with information about TalkTracker!'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$div,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('container padding-32'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$id('contact'),
+															_1: {ctor: '[]'}
+														}
+													},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$h3,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$class('border-bottom border-light-grey padding-16'),
 																_1: {ctor: '[]'}
 															},
 															{
 																ctor: '::',
-																_0: _elm_lang$html$Html$text('SUBMIT'),
+																_0: _elm_lang$html$Html$text('Contact'),
 																_1: {ctor: '[]'}
 															}),
-														_1: {ctor: '[]'}
-													}),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$div,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('container padding-32'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$id('about'),
-																_1: {ctor: '[]'}
-															}
-														},
-														{
+														_1: {
 															ctor: '::',
 															_0: A2(
-																_elm_lang$html$Html$h3,
+																_elm_lang$html$Html$p,
+																{ctor: '[]'},
 																{
 																	ctor: '::',
-																	_0: _elm_lang$html$Html_Attributes$class('border-bottom border-light-grey padding-16'),
-																	_1: {ctor: '[]'}
-																},
-																{
-																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('About'),
+																	_0: _elm_lang$html$Html$text('For help fill out the form below.'),
 																	_1: {ctor: '[]'}
 																}),
 															_1: {
 																ctor: '::',
 																_0: A2(
-																	_elm_lang$html$Html$p,
-																	{ctor: '[]'},
+																	_elm_lang$html$Html$form,
 																	{
 																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('Fill me with information about TalkTracker!'),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {ctor: '[]'}
-															}
-														}),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$div,
-															{
-																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$class('container padding-32'),
-																_1: {
-																	ctor: '::',
-																	_0: _elm_lang$html$Html_Attributes$id('contact'),
-																	_1: {ctor: '[]'}
-																}
-															},
-															{
-																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html$h3,
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html_Attributes$class('border-bottom border-light-grey padding-16'),
-																		_1: {ctor: '[]'}
+																		_0: _elm_lang$html$Html_Attributes$action('/action_page.php'),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Attributes$target('_blank'),
+																			_1: {ctor: '[]'}
+																		}
 																	},
 																	{
 																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('Contact'),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {
-																	ctor: '::',
-																	_0: A2(
-																		_elm_lang$html$Html$p,
-																		{ctor: '[]'},
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('For help fill out the form below.'),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {
-																		ctor: '::',
 																		_0: A2(
-																			_elm_lang$html$Html$form,
+																			_elm_lang$html$Html$input,
 																			{
 																				ctor: '::',
-																				_0: _elm_lang$html$Html_Attributes$action('/action_page.php'),
+																				_0: _elm_lang$html$Html_Attributes$class('input border'),
 																				_1: {
 																					ctor: '::',
-																					_0: _elm_lang$html$Html_Attributes$target('_blank'),
-																					_1: {ctor: '[]'}
+																					_0: _elm_lang$html$Html_Attributes$placeholder('Name'),
+																					_1: {
+																						ctor: '::',
+																						_0: _elm_lang$html$Html_Attributes$name('Name'),
+																						_1: {ctor: '[]'}
+																					}
 																				}
 																			},
-																			{
+																			{ctor: '[]'}),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(
+																				_elm_lang$html$Html$input,
+																				{
+																					ctor: '::',
+																					_0: _elm_lang$html$Html_Attributes$class('input section border'),
+																					_1: {
+																						ctor: '::',
+																						_0: _elm_lang$html$Html_Attributes$placeholder('Email'),
+																						_1: {
+																							ctor: '::',
+																							_0: _elm_lang$html$Html_Attributes$name('Email'),
+																							_1: {ctor: '[]'}
+																						}
+																					}
+																				},
+																				{ctor: '[]'}),
+																			_1: {
 																				ctor: '::',
 																				_0: A2(
 																					_elm_lang$html$Html$input,
 																					{
 																						ctor: '::',
-																						_0: _elm_lang$html$Html_Attributes$class('input border'),
+																						_0: _elm_lang$html$Html_Attributes$class('input section border'),
 																						_1: {
 																							ctor: '::',
-																							_0: _elm_lang$html$Html_Attributes$placeholder('Name'),
+																							_0: _elm_lang$html$Html_Attributes$placeholder('Subject'),
 																							_1: {
 																								ctor: '::',
-																								_0: _elm_lang$html$Html_Attributes$name('Name'),
+																								_0: _elm_lang$html$Html_Attributes$name('Subject'),
 																								_1: {ctor: '[]'}
 																							}
 																						}
@@ -758,10 +1468,10 @@ var _user$project$TalkTracker$view = function (model) {
 																							_0: _elm_lang$html$Html_Attributes$class('input section border'),
 																							_1: {
 																								ctor: '::',
-																								_0: _elm_lang$html$Html_Attributes$placeholder('Email'),
+																								_0: _elm_lang$html$Html_Attributes$placeholder('Comment'),
 																								_1: {
 																									ctor: '::',
-																									_0: _elm_lang$html$Html_Attributes$name('Email'),
+																									_0: _elm_lang$html$Html_Attributes$name('Comment'),
 																									_1: {ctor: '[]'}
 																								}
 																							}
@@ -770,77 +1480,39 @@ var _user$project$TalkTracker$view = function (model) {
 																					_1: {
 																						ctor: '::',
 																						_0: A2(
-																							_elm_lang$html$Html$input,
+																							_elm_lang$html$Html$button,
 																							{
 																								ctor: '::',
-																								_0: _elm_lang$html$Html_Attributes$class('input section border'),
-																								_1: {
-																									ctor: '::',
-																									_0: _elm_lang$html$Html_Attributes$placeholder('Subject'),
-																									_1: {
-																										ctor: '::',
-																										_0: _elm_lang$html$Html_Attributes$name('Subject'),
-																										_1: {ctor: '[]'}
-																									}
-																								}
+																								_0: _elm_lang$html$Html_Attributes$class('button black section'),
+																								_1: {ctor: '[]'}
 																							},
-																							{ctor: '[]'}),
-																						_1: {
-																							ctor: '::',
-																							_0: A2(
-																								_elm_lang$html$Html$input,
-																								{
-																									ctor: '::',
-																									_0: _elm_lang$html$Html_Attributes$class('input section border'),
-																									_1: {
-																										ctor: '::',
-																										_0: _elm_lang$html$Html_Attributes$placeholder('Comment'),
-																										_1: {
-																											ctor: '::',
-																											_0: _elm_lang$html$Html_Attributes$name('Comment'),
-																											_1: {ctor: '[]'}
-																										}
-																									}
-																								},
-																								{ctor: '[]'}),
-																							_1: {
+																							{
 																								ctor: '::',
 																								_0: A2(
-																									_elm_lang$html$Html$button,
+																									_elm_lang$html$Html$i,
 																									{
 																										ctor: '::',
-																										_0: _elm_lang$html$Html_Attributes$class('button black section'),
+																										_0: _elm_lang$html$Html_Attributes$class('fa fa-paper-plane'),
 																										_1: {ctor: '[]'}
 																									},
 																									{
 																										ctor: '::',
-																										_0: A2(
-																											_elm_lang$html$Html$i,
-																											{
-																												ctor: '::',
-																												_0: _elm_lang$html$Html_Attributes$class('fa fa-paper-plane'),
-																												_1: {ctor: '[]'}
-																											},
-																											{
-																												ctor: '::',
-																												_0: _elm_lang$html$Html$text('SEND MESSAGE'),
-																												_1: {ctor: '[]'}
-																											}),
+																										_0: _elm_lang$html$Html$text('SEND MESSAGE'),
 																										_1: {ctor: '[]'}
 																									}),
 																								_1: {ctor: '[]'}
-																							}
-																						}
+																							}),
+																						_1: {ctor: '[]'}
 																					}
 																				}
-																			}),
-																		_1: {ctor: '[]'}
-																	}
-																}
-															}),
-														_1: {ctor: '[]'}
-													}
-												}
+																			}
+																		}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														}
+													}),
+												_1: {ctor: '[]'}
 											}
 										}
 									}
@@ -879,7 +1551,7 @@ var _user$project$TalkTracker$main = _elm_lang$html$Html$program(
 		init: {ctor: '_Tuple2', _0: _user$project$TalkTracker$initialModel, _1: _elm_lang$core$Platform_Cmd$none},
 		view: _user$project$TalkTracker$view,
 		update: _user$project$TalkTracker$update,
-		subscriptions: function (_p3) {
+		subscriptions: function (_p23) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();

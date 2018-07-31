@@ -2,10 +2,10 @@ module TalkTracker exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (id, class, classList, src, name, type_, title, href, style, required, value, defaultValue, alt, width, height, action, target, placeholder, required)
-import Html.Events exposing (on, targetValue, onInput)
+import Html.Events exposing (on, targetValue, onInput, onBlur)
 import Parser exposing (run, int)
 import Json.Decode as Json
-import Array exposing (initialize, fromList, toList, set)
+import Array exposing (initialize, fromList, toList, set, repeat)
 import Bootstrap.Form exposing (help)
 import Regex exposing (regex, contains, find)
 
@@ -101,12 +101,12 @@ view model =
 {-- Functions used for input fields --}
 viewInputField : Model -> String -> Html Msg
 viewInputField model name =
-    div [] [ input [ class "input section border", placeholder name, required True, id (nameToId name), onInput (validateField name) ] [] 
-        , help [] [ helpText model name ]
+    div [] [ input [ class "input section border", placeholder name, required True, id (nameToId name), onInput (validateField name), onBlurWithTargetValue (validateField name) ] [] 
+        , help [] [ text (helpText model name) ]
         ]
 
 
-helpText : Model -> String -> Html msg
+helpText : Model -> String -> String
 helpText model name = 
     case matchHelper name of
         Speaker ->
@@ -160,6 +160,7 @@ helpText model name =
                     "No help message for this field"
 
 
+validateField : String -> String -> Msg
 validateField name value = 
     case name of 
         "Number of Speakers" ->
@@ -181,7 +182,7 @@ validateField name value =
         "Ward" ->
             case value of
                 "" ->
-                    SetWard (Err "Please enter a Ward")
+                    SetWard (Err "Please enter a ward")
 
                 _ ->
                     SetWard (Ok value)
@@ -270,7 +271,7 @@ validateField name value =
                 Speaker ->
                     if (value == "") then 
                         SetSpeaker (Err "Please enter a name")
-                    else if (findInt name == Nothing) then 
+                    else if (findInt name == "findInt error") then 
                         SetSpeaker (Err "There has been an error with the form. Please reload the page")
                     else 
                         case run int (findInt name) of
@@ -281,20 +282,30 @@ validateField name value =
                                 SetSpeaker ( Err "There has been an error with the input. Please reload the page")
 
                 SpecialMusicalNumber ->
-                    if (value == "") then SetSpecialMusicalNumber (Err "Please enter a name")
-                    else if (findInt name == Nothing) then SetSpecialMusicalNumber (Err "There has been an error with the form. Please reload the page")
-                    else SetSpecialMusicalNumber ( Ok ( findInt name, value ) )
+                    if (value == "") then 
+                        SetSpecialMusicalNumber (Err "Please enter a special musical number")
+                    else if (findInt name == "findInt error") then 
+                        SetSpecialMusicalNumber (Err "There has been an error with the form. Please reload the page")
+                    else 
+                        case run int (findInt name) of
+                            Ok num ->
+                                SetSpecialMusicalNumber ( Ok (num, value) )
+
+                            Err _ ->
+                                SetSpecialMusicalNumber ( Err "There has been an error with the input. Please reload the page")
 
                 Other ->
                     MsgError
 
 
+matchHelper : String -> MatchResult
 matchHelper string = 
     if contains speakerRegEx string then Speaker 
     else if contains spcMusicNumRegEx string then SpecialMusicalNumber
     else Other
 
 
+findInt : String -> String
 findInt string = 
     let 
         maybeMatch = 
@@ -307,11 +318,14 @@ findInt string =
                 record.match
             
             Nothing ->
-                Nothing
+                "findInt error"
 
 
+speakerRegEx : Regex.Regex
 speakerRegEx = regex "^(Speaker#\\d+)$"
 
+
+spcMusicNumRegEx : Regex.Regex
 spcMusicNumRegEx = regex "^(Special\\sMusical\\sNumber#\\d+)$"
 
 {--dateRegEx = regex "(^(((0[1-9]|1[0-9]|2[0-8])[\/](0[1-9]|1[012]))|((29|30|31)[\/](0[13578]|1[02]))|((29|30)[\/](0[4,6,9]|11)))[\/](19|[2-9][0-9])\\d\\d$)|(^29[\/]02[\/](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$)" --}
@@ -343,84 +357,91 @@ parseInt msg string =
         msg parseResult
 
 
-fixSpeakersRecord : Int -> Array.Array { int : String }
+fixSpeakersRecord : Int -> Array.Array { speaker : String }
 fixSpeakersRecord numSpeakers = 
-    initialize numSpeakers ((+) 1 ) 
-        |> toList
-        |> (List.map (\int -> { int = "" } ) )
-        |> fromList
+    repeat numSpeakers { speaker = "" }
 
 
-fixSpcMusicalNumbersRecord : Int -> Array.Array { int : String }
+fixSpcMusicalNumbersRecord : Int -> Array.Array { specialMusicalNumber : String }
 fixSpcMusicalNumbersRecord numSpcMusic = 
-    initialize numSpcMusic ((+) 1 ) 
-        |> toList
-        |> (List.map (\int -> { int = "" } ) )
-        |> fromList
+    repeat numSpcMusic { specialMusicalNumber = "" }
 
+{-- Help set functions --}
 
-toRecord : a -> { int : String }
-toRecord int =  { int = "" }
-
-{-- Backup
-toRecord numSpeakers int = 
-    if (numSpeakers == 0) then {} else
-        case int of
-            numSpeakers -> { numSpeakers = ""
-                        , toRecord numSpeakers (int - 1)
-                        }
-
-            1 -> 1 = ""
-
-            int -> int = "", toRecord numSpeakers (int - 1)   
---}
-
-{-- help set functions --}
-
+setHelpNumSpeakers : { b | numSpeakers : a } -> c -> { b | numSpeakers : c }
 setHelpNumSpeakers help value = 
     { help | numSpeakers = value }
 
+
+setHelpNumSpcMusic : { b | numSpcMusic : a } -> c -> { b | numSpcMusic : c }
 setHelpNumSpcMusic help value = 
     { help | numSpcMusic = value }
 
+
+setHelpWard : { b | ward : a } -> c -> { b | ward : c }
 setHelpWard help value = 
     { help | ward = value }
 
+
+setHelpDate : { b | date : a } -> c -> { b | date : c }
 setHelpDate help value = 
     { help | date = value } 
 
+
+setHelpTime : { b | time : a } -> c -> { b | time : c }
 setHelpTime help value = 
     { help | time = value }
 
+
+setHelpConducting : { b | conducting : a } -> c -> { b | conducting : c }
 setHelpConducting help value = 
     { help | conducting = value } 
 
+
+setHelpOrganist : { b | organist : a } -> c -> { b | organist : c }
 setHelpOrganist help value = 
     { help | organist = value }
 
+
+setHelpChorister : { b | chorister : a } -> c -> { b | chorister : c }
 setHelpChorister help value = 
     { help | chorister = value }
 
+
+setHelpOpeningHymn : { b | openingHymn : a } -> c -> { b | openingHymn : c }
 setHelpOpeningHymn help value = 
     { help | openingHymn = value }
 
+
+setHelpInvocation : { b | invocation : a } -> c -> { b | invocation : c }
 setHelpInvocation help value = 
     { help | invocation = value }
 
+
+setHelpSacramentHymn : { b | sacramentHymn : a } -> c -> { b | sacramentHymn : c }
 setHelpSacramentHymn help value = 
     { help | sacramentHymn = value }
 
+
+setHelpClosingHymn : { b | closingHymn : a } -> c -> { b | closingHymn : c }
 setHelpClosingHymn help value = 
     { help | closingHymn = value }
 
+
+setHelpBenediction : { b | benediction : a } -> c -> { b | benediction : c }
 setHelpBenediction help value = 
     { help | benediction = value }
 
+
+setHelpSpeakers : { b | speakers : a } -> c -> { b | speakers : c }
 setHelpSpeakers help value = 
     { help | speakers = value }
 
+
+setHelpSpcMusicalNumbers : { b | speakers : a } -> c -> { b | speakers : c }
 setHelpSpcMusicalNumbers help value = 
     { help | speakers = value }
+
 
 -- End set help functions --
 
@@ -506,14 +527,14 @@ update msg model =
         SetBenediction (Err helpMsg) ->
             ( { model | help = setHelpBenediction model.help helpMsg }, Cmd.none )
 
-        SetSpeaker (Ok (speakerNum, name)) ->
-            ( { model | speakers = set (speakerNum - 1) name model.speakers, help = setHelpSpeakers model.help "" }, Cmd.none )
+        SetSpeaker ( Ok (speakerNum, name) ) ->
+            ( { model | speakers = set (speakerNum - 1) (SpeakerPair name) model.speakers, help = setHelpSpeakers model.help "" }, Cmd.none )
 
         SetSpeaker (Err helpMsg) ->
             ( { model | help = setHelpSpeakers model.help helpMsg }, Cmd.none ) {-- Maybe redo speakers field of help...? --}
 
         SetSpecialMusicalNumber (Ok (spcMusicalNum, name)) ->
-            ( { model | spcMusicalNumbers = set (spcMusicalNum - 1) name model.spcMusicalNumbers, help = setHelpSpcMusicalNumbers model.help "" }, Cmd.none )
+            ( { model | spcMusicalNumbers = set (spcMusicalNum - 1) (SpcMusicPair name) model.spcMusicalNumbers, help = setHelpSpcMusicalNumbers model.help "" }, Cmd.none )
 
         SetSpecialMusicalNumber (Err helpMsg) ->
             ( { model | help = setHelpSpcMusicalNumbers model.help helpMsg }, Cmd.none )
@@ -533,6 +554,11 @@ type Value
     | String
 
 
+type alias SpeakerPair = { speaker : String }
+
+
+type alias SpcMusicPair = { specialMusicalNumber : String }
+
 type Msg
     = SetNumSpeakers (Result String Int)
     | SetNumMusic (Result String Int) 
@@ -547,27 +573,9 @@ type Msg
     | SetSacramentHymn (Result String String)
     | SetClosingHymn (Result String String)
     | SetBenediction (Result String String)
-    | SetSpeaker (Result (String, String) String)
-    | SetSpecialMusicalNumber (Result (String, String) String)
+    | SetSpeaker (Result String (Int, String) )
+    | SetSpecialMusicalNumber (Result String (Int, String))
     | MsgError
-
-
-type alias Help = { numSpeakers : String
-                    , numSpcMusic : String
-                    , ward : String
-                    , date : String
-                    , time : String
-                    , conducting : String
-                    , organist : String
-                    , chorister : String
-                    , openingHymn : String
-                    , invocation : String
-                    , sacramentHymn : String
-                    , speakers : String
-                    , spcMusicalNumbers : String
-                    , closingHymn : String
-                    , benediction : String
-                    }
 
 
 initialModel : Model
@@ -616,11 +624,26 @@ type alias Model = { numSpeakers : Int
                    , openingHymn : String
                    , invocation : String
                    , sacramentHymn : String
-                   , speakers : Array.Array { int : String } 
-                   , spcMusicalNumbers : Array.Array { int : String }
+                   , speakers : Array.Array { speaker : String } 
+                   , spcMusicalNumbers : Array.Array { specialMusicalNumber : String }
                    , closingHymn : String
                    , benediction : String
-                   , help : Help
+                   , help : { numSpeakers : String
+                            , numSpcMusic : String
+                            , ward : String
+                            , date : String
+                            , time : String
+                            , conducting : String
+                            , organist : String
+                            , chorister : String
+                            , openingHymn : String
+                            , invocation : String
+                            , sacramentHymn : String
+                            , speakers : String
+                            , spcMusicalNumbers : String
+                            , closingHymn : String
+                            , benediction : String
+                            }
                    }
 
 
