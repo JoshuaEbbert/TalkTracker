@@ -11253,7 +11253,7 @@ var _user$project$TalkTracker$setHelpSpcMusicalNumbers = F2(
 	function (help, value) {
 		return _elm_lang$core$Native_Utils.update(
 			help,
-			{speakers: value});
+			{spcMusicalNumbers: value});
 	});
 var _user$project$TalkTracker$setHelpSpeakers = F2(
 	function (help, value) {
@@ -12113,7 +12113,7 @@ var _user$project$TalkTracker$validateField = F2(
 					case 'Speaker':
 						if (_elm_lang$core$Native_Utils.eq(value, '')) {
 							return _user$project$TalkTracker$SetSpeaker(
-								_elm_lang$core$Result$Err('Please enter a name'));
+								_elm_lang$core$Result$Err('Please fill each of the speaker fields'));
 						} else {
 							if (_elm_lang$core$Native_Utils.eq(
 								_user$project$TalkTracker$findInt(name),
@@ -12138,7 +12138,7 @@ var _user$project$TalkTracker$validateField = F2(
 					case 'SpecialMusicalNumber':
 						if (_elm_lang$core$Native_Utils.eq(value, '')) {
 							return _user$project$TalkTracker$SetSpecialMusicalNumber(
-								_elm_lang$core$Result$Err('Please enter a special musical number'));
+								_elm_lang$core$Result$Err('Please fill each of the special musical number fields'));
 						} else {
 							if (_elm_lang$core$Native_Utils.eq(
 								_user$project$TalkTracker$findInt(name),
